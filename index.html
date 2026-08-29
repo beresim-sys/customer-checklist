@@ -258,7 +258,7 @@
                     title: "שלב ב': תחקיר",
                     tasks: [
                         { id: "task-2-1", title: "הפעלת רנית", completed: false, dueDate: "", notes: "" },
-                        { id: "task-2-2", title: "ביצוע תחקיר עומק", completed: false, dueDate: "", notes: "" },
+                        { id: "task-2-2", title: "ביצוע תחקיר עומק והכנסת הדו\"ח למקורות הרקע", completed: false, dueDate: "", notes: "" },
                         { id: "task-2-3", title: "ניתוח מסמכים ותמונות בג'מיני", completed: false, dueDate: "", notes: "" },
                         { id: "task-2-4", title: "הפעלת תמי לניתוח שפת גוף וקול", completed: false, dueDate: "", notes: "" },
                         { id: "task-2-5", title: "הפעלת צוות העריכה הראשונית של טלי", completed: false, dueDate: "", notes: "" }
@@ -315,12 +315,13 @@
                 try {
                     appState = JSON.parse(stored);
                     if (appState.phases && Array.isArray(appState.phases) && appState.phases.length > 0) {
-                        // Check if it's the old default state (contains old task 1, old Phase 1 title, old Phase 2 title, or missing new Phase 2 tasks)
+                        // Check if it's the old default state (contains old task 1, old Phase 1 title, old Phase 2 title, missing new Phase 2 tasks, or old research task title)
                         const hasOldTask1 = appState.phases[0].tasks.some(t => t.title === "פגישת אפיון והגדרת קונספט לספר");
                         const hasOldPhase1Title = appState.phases[0].title === "שלב א': תכנון, אפיון והתקשרות";
                         const hasOldPhase2 = appState.phases.length > 1 && appState.phases[1].title === "שלב ב': כתיבה ואיסוף חומרים";
                         const missingTask2_5 = appState.phases.length > 1 && !appState.phases[1].tasks.some(t => t.title === "הפעלת צוות העריכה הראשונית של טלי");
-                        if (!hasOldTask1 && !hasOldPhase1Title && !hasOldPhase2 && !missingTask2_5) {
+                        const hasOldResearchTask = appState.phases.length > 1 && appState.phases[1].tasks.some(t => t.title === "ביצוע תחקיר עומק");
+                        if (!hasOldTask1 && !hasOldPhase1Title && !hasOldPhase2 && !missingTask2_5 && !hasOldResearchTask) {
                             useDefault = false;
                         }
                     }
