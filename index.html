@@ -277,11 +277,11 @@
                     id: "phase-4",
                     title: "שלב ד': סקיצה ללקוח",
                     tasks: [
-                        { id: "task-4-1", title: "עיצוב סקיצות לכריכה (קדמית, גב ושידרה)", completed: false, dueDate: "", notes: "שליחת 2-3 סקיצות שונות לבחירת הלקוח." },
-                        { id: "task-4-2", title: "עימוד פנים של הספר (בחירת גופנים, שוליים, מרווחים)", completed: false, dueDate: "", notes: "" },
-                        { id: "task-4-3", title: "שילוב תמונות, איורים וטבלאות בתוך העימוד", completed: false, dueDate: "", notes: "" },
-                        { id: "task-4-4", title: "הגהה של קובץ הספר המעומד", completed: false, dueDate: "", notes: "חיפוש שורות יתומות, שבירות מילים לא נכונות או תקלות גרפיות." },
-                        { id: "task-4-5", title: "קבלת אישור סופי של הלקוח לקובץ ה-PDF לדפוס", completed: false, dueDate: "", notes: "" }
+                        { id: "task-4-1", title: "הפעלת רועי לכתיבת 6000 מילים", completed: false, dueDate: "", notes: "" },
+                        { id: "task-4-2", title: "הפעלת דניאל לשכתוב", completed: false, dueDate: "", notes: "" },
+                        { id: "task-4-3", title: "הפעלת אסתר לאיתור סתירות", completed: false, dueDate: "", notes: "" },
+                        { id: "task-4-4", title: "הפעלת יהודה להגהה", completed: false, dueDate: "", notes: "" },
+                        { id: "task-4-5", title: "הפעלת תפארת לכתיבת AI", completed: false, dueDate: "", notes: "" }
                     ]
                 },
                 {
@@ -327,7 +327,8 @@
                         const hasOldPhase3Task2 = appState.phases.length > 2 && appState.phases[2].tasks.some(t => t.title === "עריכה לשונית וסגנונית");
                         const hasOldPhase3ExtraTasks = appState.phases.length > 2 && appState.phases[2].tasks.length > 2;
                         const hasOldPhase4Title = appState.phases.length > 3 && appState.phases[3].title === "שלב ד': עימוד ועיצוב גרפי";
-                        if (!hasOldTask1 && !hasOldPhase1Title && !hasOldPhase2 && !missingTask2_5 && !missingTask2_6 && !hasOldResearchTask && !hasOldGeminiTask && !hasOldPhase3Title && !hasOldPhase3Task1 && !hasOldPhase3Task2 && !hasOldPhase3ExtraTasks && !hasOldPhase4Title) {
+                        const hasOldPhase4Task1 = appState.phases.length > 3 && appState.phases[3].tasks.some(t => t.title === "עיצוב סקיצות לכריכה (קדמית, גב ושידרה)");
+                        if (!hasOldTask1 && !hasOldPhase1Title && !hasOldPhase2 && !missingTask2_5 && !missingTask2_6 && !hasOldResearchTask && !hasOldGeminiTask && !hasOldPhase3Title && !hasOldPhase3Task1 && !hasOldPhase3Task2 && !hasOldPhase3ExtraTasks && !hasOldPhase4Title && !hasOldPhase4Task1) {
                             useDefault = false;
                         }
                     }
