@@ -270,9 +270,7 @@
                     title: "שלב ג': סקיצה ראשונה",
                     tasks: [
                         { id: "task-3-1", title: "הפעלת רועי לכתיבת 2500 מילים", completed: false, dueDate: "", notes: "" },
-                        { id: "task-3-2", title: "הפעלת אבי לסתירות בין המחקר לראיון הלקוח", completed: false, dueDate: "", notes: "" },
-                        { id: "task-3-3", title: "הגהה סופית ותיקון שגיאות כתיב ופיסוק", completed: false, dueDate: "", notes: "" },
-                        { id: "task-3-4", title: "אישור לקוח לטקסט הסופי לפני התחלת עימוד", completed: false, dueDate: "", notes: "חתימת הלקוח על הטקסט הסופי. לאחר שלב זה לא יוכנסו שינויי נוסח." }
+                        { id: "task-3-2", title: "הפעלת אבי לסתירות בין המחקר לראיון הלקוח", completed: false, dueDate: "", notes: "" }
                     ]
                 },
                 {
@@ -327,7 +325,8 @@
                         const hasOldPhase3Title = appState.phases.length > 2 && appState.phases[2].title === "שלב ג': עריכה והגהה";
                         const hasOldPhase3Task1 = appState.phases.length > 2 && appState.phases[2].tasks.some(t => t.title === "עריכה ספרותית ומבנית לטיוטה המלאה");
                         const hasOldPhase3Task2 = appState.phases.length > 2 && appState.phases[2].tasks.some(t => t.title === "עריכה לשונית וסגנונית");
-                        if (!hasOldTask1 && !hasOldPhase1Title && !hasOldPhase2 && !missingTask2_5 && !missingTask2_6 && !hasOldResearchTask && !hasOldGeminiTask && !hasOldPhase3Title && !hasOldPhase3Task1 && !hasOldPhase3Task2) {
+                        const hasOldPhase3ExtraTasks = appState.phases.length > 2 && appState.phases[2].tasks.length > 2;
+                        if (!hasOldTask1 && !hasOldPhase1Title && !hasOldPhase2 && !missingTask2_5 && !missingTask2_6 && !hasOldResearchTask && !hasOldGeminiTask && !hasOldPhase3Title && !hasOldPhase3Task1 && !hasOldPhase3Task2 && !hasOldPhase3ExtraTasks) {
                             useDefault = false;
                         }
                     }
