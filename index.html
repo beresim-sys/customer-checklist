@@ -565,11 +565,11 @@
             const dashboardActive = activeTabId === "all-clients";
             const clientActive = activeTabId === "client-details";
             let tabsHtml = `
-                <button onclick="setActiveTab('all-clients')" class="flex items-center gap-2 py-3 px-1 border-b-2 font-semibold text-sm shrink-0 transition ${dashboardActive ? 'border-brand-600 text-brand-600' : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'}">
+                <button onclick="setActiveTab('all-clients')" class="flex items-center gap-2 py-3 px-1 border-b-2 font-semibold text-base shrink-0 transition ${dashboardActive ? 'border-brand-600 text-brand-600' : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'}">
                     <i class="fa-solid fa-gauge-high text-base"></i>
                     <span>לוח לקוחות מרוכז</span>
                 </button>
-                <button onclick="setActiveTab('client-details')" class="flex items-center gap-2 py-3 px-1 border-b-2 font-semibold text-sm shrink-0 transition ${clientActive ? 'border-brand-600 text-brand-600' : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'}">
+                <button onclick="setActiveTab('client-details')" class="flex items-center gap-2 py-3 px-1 border-b-2 font-semibold text-base shrink-0 transition ${clientActive ? 'border-brand-600 text-brand-600' : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'}">
                     <i class="fa-solid fa-user-tie text-base"></i>
                     <span>פרטי לקוח</span>
                 </button>
@@ -588,15 +588,15 @@
                     let titleHtml = "";
                     if (titleParts.length > 1) {
                         titleHtml = `
-                            <span class="block font-bold text-xs text-inherit">${escapeHtml(titleParts[0].trim())}</span>
-                            <span class="block font-medium text-[11px] opacity-80 mt-0.5 text-inherit">${escapeHtml(titleParts.slice(1).join(':').trim())}</span>
+                            <span class="block font-bold text-sm text-inherit">${escapeHtml(titleParts[0].trim())}</span>
+                            <span class="block font-medium text-[13px] opacity-80 mt-0.5 text-inherit">${escapeHtml(titleParts.slice(1).join(':').trim())}</span>
                         `;
                     } else {
-                        titleHtml = `<span class="block font-bold text-xs text-inherit">${escapeHtml(phase.title)}</span>`;
+                        titleHtml = `<span class="block font-bold text-sm text-inherit">${escapeHtml(phase.title)}</span>`;
                     }
 
                     tabsHtml += `
-                        <button onclick="setActiveTab('${phase.id}')" class="flex items-center gap-2 py-3 px-1 border-b-2 font-semibold text-sm shrink-0 transition ${isActive ? 'border-brand-600 text-brand-600' : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'}">
+                        <button onclick="setActiveTab('${phase.id}')" class="flex items-center gap-2 py-3 px-1 border-b-2 font-semibold text-base shrink-0 transition ${isActive ? 'border-brand-600 text-brand-600' : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'}">
                             <div class="text-right flex flex-col justify-center">
                                 ${titleHtml}
                             </div>
