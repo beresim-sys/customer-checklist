@@ -242,7 +242,7 @@
             projects: [
                 {
                     id: "proj-default",
-                    clientName: "רשימת תיוג ללקוחות",
+                    clientName: "ויני",
                     clientPhone: "050-0000000",
                     clientEmail: "client@example.com",
                     phases: [
@@ -250,10 +250,10 @@
                             id: "phase-1",
                             title: "שלב א': התקשרות עם לקוח",
                             tasks: [
-                                { id: "task-1-1", title: "ראיון זום עם הלקוח", completed: false, dueDate: "", notes: "פגישת אפיון והגדרת קונספט לספר." },
-                                { id: "task-1-2", title: "קבלת מקדמה", completed: false, dueDate: "", notes: "הסדרת תשלום מקדמה ותיאום הסכם עבודה." },
-                                { id: "task-1-3", title: "פתיחת מחברת לקוח", completed: false, dueDate: "", notes: "הקמת תיקיה ללקוח וריכוז פרטים ראשוניים." },
-                                { id: "task-1-4", title: "קבלת חומרי רקע נוספים מהלקוח", completed: false, dueDate: "", notes: "איסוף חומרים, תמונות וקבצי טקסט ראשוניים מהלקוח." }
+                                { id: "task-1-1", title: "ראיון זום עם הלקוח", completed: true, dueDate: "", notes: "פגישת אפיון והגדרת קונספט לספר." },
+                                { id: "task-1-2", title: "קבלת מקדמה", completed: true, dueDate: "", notes: "הסדרת תשלום מקדמה ותיאום הסכם עבודה." },
+                                { id: "task-1-3", title: "פתיחת מחברת לקוח", completed: true, dueDate: "", notes: "הקמת תיקיה ללקוח וריכוז פרטים ראשוניים." },
+                                { id: "task-1-4", title: "קבלת חומרי רקע נוספים מהלקוח", completed: true, dueDate: "", notes: "איסוף חומרים, תמונות וקבצי טקסט ראשוניים מהלקוח." }
                             ]
                         },
                         {
@@ -403,6 +403,20 @@
                     };
                     appState.activeProjectId = appState.projects[0].id;
                 }
+            }
+
+            // Recovery/Migration check: If they reset or have the old placeholder client names, migrate to 'ויני' and check Phase 1.
+            if (appState.projects && Array.isArray(appState.projects)) {
+                appState.projects.forEach(proj => {
+                    if (proj.clientName === "רשימת תיוג ללקוחות" || proj.clientName === "רשימת תיוג ללקוח" || proj.clientName === "חיי שרה") {
+                        proj.clientName = "ויני";
+                        // Mark phase 1 tasks as completed
+                        const ph1 = proj.phases.find(ph => ph.id === "phase-1");
+                        if (ph1) {
+                            ph1.tasks.forEach(t => t.completed = true);
+                        }
+                    }
+                });
             }
 
             // Load active tab from localStorage if exists
@@ -1196,7 +1210,7 @@
         function confirmReset() {
             if (confirm("האם אתה בטוח שברצונך לאפס את הלוח? כל הלקוחות, המשימות והשלבים יימחקו והמערכת תחזור לברירת המחדל.")) {
                 appState = JSON.parse(JSON.stringify(defaultState));
-                activeTabId = "client-details";
+                activeTabId = "all-clients";
                 expandedNotes = {};
                 saveAndRender();
             }
