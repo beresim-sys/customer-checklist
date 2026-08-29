@@ -291,7 +291,7 @@
                 },
                 {
                     id: "phase-5",
-                    title: "שלב ה': הפקה, הדפסה והפצה",
+                    title: "שלב ה': הפקת מוצר סופי",
                     tasks: [
                         { id: "task-5-1", title: "רישום הספר וקבלת מסת\"ב (ISBN) ודאנאקוד", completed: false, dueDate: "", notes: "הסדרת הרישום הרשמי מול בית הספרים הלאומי." },
                         { id: "task-5-2", title: "סגירת קבצים מותאמים לדפוס (הצלבות צבעים ובלידים)", completed: false, dueDate: "", notes: "" },
@@ -335,7 +335,8 @@
                         const hasOldPhase4Task1 = appState.phases.length > 3 && appState.phases[3].tasks.some(t => t.title === "עיצוב סקיצות לכריכה (קדמית, גב ושידרה)");
                         const missingTask4_6 = appState.phases.length > 3 && !appState.phases[3].tasks.some(t => t.title === "הפעלת צוות ארט של בני");
                         const missingTask4_9 = appState.phases.length > 3 && !appState.phases[3].tasks.some(t => t.title === "שליחת סקיצה ראשונה ללקוח");
-                        if (!hasOldTask1 && !hasOldPhase1Title && !hasOldPhase2 && !missingTask2_5 && !missingTask2_6 && !hasOldResearchTask && !hasOldGeminiTask && !hasOldPhase3Title && !hasOldPhase3Task1 && !hasOldPhase3Task2 && !hasOldPhase3TaskCount && !hasOldPhase4Title && !hasOldPhase4Task1 && !missingTask4_6 && !missingTask4_9) {
+                        const hasOldPhase5Title = appState.phases.length > 4 && appState.phases[4].title === "שלב ה': הפקה, הדפסה והפצה";
+                        if (!hasOldTask1 && !hasOldPhase1Title && !hasOldPhase2 && !missingTask2_5 && !missingTask2_6 && !hasOldResearchTask && !hasOldGeminiTask && !hasOldPhase3Title && !hasOldPhase3Task1 && !hasOldPhase3Task2 && !hasOldPhase3TaskCount && !hasOldPhase4Title && !hasOldPhase4Task1 && !missingTask4_6 && !missingTask4_9 && !hasOldPhase5Title) {
                             useDefault = false;
                         }
                     }
