@@ -135,7 +135,7 @@
                     </div>
                     <div>
                         <!-- Dynamic project title -->
-                        <h1 class="text-xl font-bold text-slate-900 tracking-tight" id="header-project-title">חיי שרה</h1>
+                        <h1 class="text-xl font-bold text-slate-900 tracking-tight" id="header-project-title">רשימת תיוג ללקוח</h1>
                         <p class="text-xs text-slate-500 font-medium">לוח בקרה להתקדמות כתיבה ועריכה</p>
                     </div>
                 </div>
@@ -198,7 +198,7 @@
         <div class="border-b-2 border-slate-900 pb-4 mb-6">
             <div class="flex justify-between items-end">
                 <div>
-                    <h1 class="text-2xl font-bold" id="print-project-header">חיי שרה</h1>
+                    <h1 class="text-2xl font-bold" id="print-project-header">רשימת תיוג ללקוח</h1>
                     <p class="text-sm text-slate-500">לוח בקרה ומעקב התקדמות הפקת ספר</p>
                     <p class="text-xs text-slate-400 mt-1" id="print-date"></p>
                 </div>
@@ -239,7 +239,7 @@
     <script>
         // Default initial application state
         const defaultState = {
-            clientName: "חיי שרה",
+            clientName: "רשימת תיוג ללקוח",
             clientPhone: "050-0000000",
             clientEmail: "client@example.com",
             phases: [
@@ -350,6 +350,8 @@
             }
             if (useDefault) {
                 appState = JSON.parse(JSON.stringify(defaultState));
+            } else if (appState.clientName === "חיי שרה") {
+                appState.clientName = "רשימת תיוג ללקוח";
             }
 
             // Load active tab from localStorage if exists
@@ -726,7 +728,7 @@
         // Update client info fields
         function updateClientField(field, value) {
             if (field === 'name') {
-                appState.clientName = value.trim() || "חיי שרה";
+                appState.clientName = value.trim() || "רשימת תיוג ללקוח";
                 document.getElementById("header-project-title").innerText = appState.clientName;
             }
             if (field === 'phone') appState.clientPhone = value.trim();
