@@ -341,7 +341,32 @@
                     activeProjectId: "proj-default"
                 };
             }
-            return appState.projects.find(p => p.id === appState.activeProjectId) || appState.projects[0];
+            const active = appState.projects.find(p => p.id === appState.activeProjectId) || appState.projects[0];
+            
+            // Self-healing check for active project phases
+            if (active && active.phases) {
+                const defaultPhases = defaultState.projects[0].phases;
+                let healed = false;
+                defaultPhases.forEach(defPh => {
+                    const hasPh = active.phases.some(ph => ph.id === defPh.id);
+                    if (!hasPh) {
+                        active.phases.push(JSON.parse(JSON.stringify(defPh)));
+                        healed = true;
+                    }
+                });
+                if (healed) {
+                    // Sort phases so they are sequential
+                    active.phases.sort((a, b) => {
+                        const indexA = defaultPhases.findIndex(ph => ph.id === a.id);
+                        const indexB = defaultPhases.findIndex(ph => ph.id === b.id);
+                        const valA = indexA === -1 ? 999 : indexA;
+                        const valB = indexB === -1 ? 999 : indexB;
+                        return valA - valB;
+                    });
+                    localStorage.setItem("customerBookChecklist", JSON.stringify(appState));
+                }
+            }
+            return active;
         }
 
         // Load data from LocalStorage or initialize default
