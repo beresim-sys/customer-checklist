@@ -135,7 +135,7 @@
                     </div>
                     <div>
                         <!-- Dynamic project title -->
-                        <h1 class="text-xl font-bold text-slate-900 tracking-tight" id="header-project-title">רשימת תיוג ללקוח</h1>
+                        <h1 class="text-xl font-bold text-slate-900 tracking-tight" id="header-project-title">רשימת תיוג ללקוחות</h1>
                         <p class="text-xs text-slate-500 font-medium">לוח בקרה להתקדמות כתיבה ועריכה</p>
                     </div>
                 </div>
@@ -198,7 +198,7 @@
         <div class="border-b-2 border-slate-900 pb-4 mb-6">
             <div class="flex justify-between items-end">
                 <div>
-                    <h1 class="text-2xl font-bold" id="print-project-header">רשימת תיוג ללקוח</h1>
+                    <h1 class="text-2xl font-bold" id="print-project-header">רשימת תיוג ללקוחות</h1>
                     <p class="text-sm text-slate-500">לוח בקרה ומעקב התקדמות הפקת ספר</p>
                     <p class="text-xs text-slate-400 mt-1" id="print-date"></p>
                 </div>
@@ -242,7 +242,7 @@
             projects: [
                 {
                     id: "proj-default",
-                    clientName: "רשימת תיוג ללקוח",
+                    clientName: "רשימת תיוג ללקוחות",
                     clientPhone: "050-0000000",
                     clientEmail: "client@example.com",
                     phases: [
@@ -327,7 +327,7 @@
             if (!appState) return null;
             if (!appState.projects || !Array.isArray(appState.projects)) {
                 const oldPhases = appState.phases || [];
-                const oldName = appState.clientName || "רשימת תיוג ללקוח";
+                const oldName = appState.clientName || "רשימת תיוג ללקוחות";
                 const oldPhone = appState.clientPhone || "050-0000000";
                 const oldEmail = appState.clientEmail || "client@example.com";
                 appState = {
@@ -388,7 +388,7 @@
                 // Migrate single project to projects structure
                 if (!appState.projects || !Array.isArray(appState.projects)) {
                     const oldPhases = appState.phases || [];
-                    const oldName = appState.clientName || "רשימת תיוג ללקוח";
+                    const oldName = appState.clientName || "רשימת תיוג ללקוחות";
                     const oldPhone = appState.clientPhone || "050-0000000";
                     const oldEmail = appState.clientEmail || "client@example.com";
                     appState = {
@@ -423,7 +423,7 @@
 
             // Sync Header Project Name
             const active = activeProj();
-            document.getElementById("header-project-title").innerText = active ? (active.clientName || "פרויקט ללא שם") : "רשימת תיוג ללקוח";
+            document.getElementById("header-project-title").innerText = active ? (active.clientName || "פרויקט ללא שם") : "רשימת תיוג ללקוחות";
             
             updateProgressPercentage();
             renderTabs();
@@ -534,7 +534,7 @@
 
                                 <div>
                                     <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">שם הלקוח / הפרויקט</label>
-                                    <input type="text" id="client-name-input" value="${escapeHtml(active.clientName)}" onchange="updateClientField('name', this.value)" class="w-full bg-slate-50 hover:bg-slate-100/50 focus:bg-white border border-slate-200 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 rounded-xl px-4 py-3 text-base font-semibold text-slate-800 outline-none transition font-sans" placeholder="למשל: רשימת תיוג ללקוח">
+                                    <input type="text" id="client-name-input" value="${escapeHtml(active.clientName)}" onchange="updateClientField('name', this.value)" class="w-full bg-slate-50 hover:bg-slate-100/50 focus:bg-white border border-slate-200 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 rounded-xl px-4 py-3 text-base font-semibold text-slate-800 outline-none transition font-sans" placeholder="למשל: רשימת תיוג ללקוחות">
                                 </div>
 
                                 <div>
@@ -874,7 +874,7 @@
             const active = activeProj();
             if (!active) return;
             if (field === 'name') {
-                active.clientName = value.trim() || "רשימת תיוג ללקוח";
+                active.clientName = value.trim() || "רשימת תיוג ללקוחות";
                 document.getElementById("header-project-title").innerText = active.clientName;
             }
             if (field === 'phone') active.clientPhone = value.trim();
@@ -1139,7 +1139,7 @@
                             projects: [
                                 {
                                     id: "proj-" + Date.now(),
-                                    clientName: imported.clientName || "רשימת תיוג ללקוח",
+                                    clientName: imported.clientName || "רשימת תיוג ללקוחות",
                                     clientPhone: imported.clientPhone || "050-0000000",
                                     clientEmail: imported.clientEmail || "client@example.com",
                                     phases: imported.phases
