@@ -270,7 +270,8 @@
                     title: "שלב ג': סקיצה ראשונה",
                     tasks: [
                         { id: "task-3-1", title: "בחירת תבנית כתיבה", completed: false, dueDate: "", notes: "" },
-                        { id: "task-3-2", title: "הפעלת אבי לסתירות בין המחקר לראיון הלקוח", completed: false, dueDate: "", notes: "" }
+                        { id: "task-3-2", title: "הפעלת רועי לכתיבת 2500 מילים", completed: false, dueDate: "", notes: "" },
+                        { id: "task-3-3", title: "הפעלת אבי לסתירות בין המחקר לראיון הלקוח", completed: false, dueDate: "", notes: "" }
                     ]
                 },
                 {
@@ -325,13 +326,13 @@
                         const hasOldResearchTask = appState.phases.length > 1 && appState.phases[1].tasks.some(t => t.title === "ביצוע תחקיר עומק");
                         const hasOldGeminiTask = appState.phases.length > 1 && appState.phases[1].tasks.some(t => t.title === "ניתוח מסמכים ותמונות בג'מיני וקישור למקורות הרקע");
                         const hasOldPhase3Title = appState.phases.length > 2 && appState.phases[2].title === "שלב ג': עריכה והגהה";
-                        const hasOldPhase3Task1 = appState.phases.length > 2 && appState.phases[2].tasks.some(t => t.title === "עריכה ספרותית ומבנית לטיוטה המלאה" || t.title === "הפעלת רועי לכתיבת 2500 מילים");
+                        const hasOldPhase3Task1 = appState.phases.length > 2 && appState.phases[2].tasks.some(t => t.title === "עריכה ספרותית ומבנית לטיוטה המלאה");
                         const hasOldPhase3Task2 = appState.phases.length > 2 && appState.phases[2].tasks.some(t => t.title === "עריכה לשונית וסגנונית");
-                        const hasOldPhase3ExtraTasks = appState.phases.length > 2 && appState.phases[2].tasks.length > 2;
+                        const hasOldPhase3TaskCount = appState.phases.length > 2 && appState.phases[2].tasks.length !== 3;
                         const hasOldPhase4Title = appState.phases.length > 3 && appState.phases[3].title === "שלב ד': עימוד ועיצוב גרפי";
                         const hasOldPhase4Task1 = appState.phases.length > 3 && appState.phases[3].tasks.some(t => t.title === "עיצוב סקיצות לכריכה (קדמית, גב ושידרה)");
                         const missingTask4_6 = appState.phases.length > 3 && !appState.phases[3].tasks.some(t => t.title === "הפעלת צוות ארט של בני");
-                        if (!hasOldTask1 && !hasOldPhase1Title && !hasOldPhase2 && !missingTask2_5 && !missingTask2_6 && !hasOldResearchTask && !hasOldGeminiTask && !hasOldPhase3Title && !hasOldPhase3Task1 && !hasOldPhase3Task2 && !hasOldPhase3ExtraTasks && !hasOldPhase4Title && !hasOldPhase4Task1 && !missingTask4_6) {
+                        if (!hasOldTask1 && !hasOldPhase1Title && !hasOldPhase2 && !missingTask2_5 && !missingTask2_6 && !hasOldResearchTask && !hasOldGeminiTask && !hasOldPhase3Title && !hasOldPhase3Task1 && !hasOldPhase3Task2 && !hasOldPhase3TaskCount && !hasOldPhase4Title && !hasOldPhase4Task1 && !missingTask4_6) {
                             useDefault = false;
                         }
                     }
