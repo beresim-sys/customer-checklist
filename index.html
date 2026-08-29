@@ -168,10 +168,7 @@
                         <!-- Populated dynamically by JS -->
                     </nav>
                     
-                    <!-- Add Phase Tab-like Button -->
-                    <button onclick="promptAddNewPhase()" class="text-slate-400 hover:text-brand-600 font-semibold text-sm py-4 px-2 shrink-0 border-b-2 border-transparent hover:border-brand-400 transition" title="הוסף שלב עבודה חדש">
-                        <i class="fa-solid fa-plus-circle text-lg"></i>
-                    </button>
+
                 </div>
             </div>
         </div>
@@ -1113,22 +1110,7 @@
             }
         }
 
-        // Add custom phase to the bottom
-        function promptAddNewPhase() {
-            const active = activeProj();
-            if (!active) return;
-            const title = prompt("הזן שם עבור שלב העבודה החדש:");
-            if (title && title.trim()) {
-                const phaseId = "phase-" + Date.now();
-                active.phases.push({
-                    id: phaseId,
-                    title: title.trim(),
-                    tasks: []
-                });
-                activeTabId = phaseId;
-                saveAndRender();
-            }
-        }
+
 
         // Project management helpers
         function forceRestoreMissingPhases() {
