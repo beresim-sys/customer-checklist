@@ -245,7 +245,7 @@
             phases: [
                 {
                     id: "phase-1",
-                    title: "שלב א': תכנון, אפיון והתקשרות",
+                    title: "שלב א': התקשרות עם לקוח",
                     tasks: [
                         { id: "task-1-1", title: "ראיון זום עם הלקוח", completed: false, dueDate: "", notes: "פגישת אפיון והגדרת קונספט לספר." },
                         { id: "task-1-2", title: "קבלת מקדמה", completed: false, dueDate: "", notes: "הסדרת תשלום מקדמה ותיאום הסכם עבודה." },
@@ -315,11 +315,12 @@
                 try {
                     appState = JSON.parse(stored);
                     if (appState.phases && Array.isArray(appState.phases) && appState.phases.length > 0) {
-                        // Check if it's the old default state (contains old task 1, old Phase 2 title, or missing new Phase 2 tasks)
+                        // Check if it's the old default state (contains old task 1, old Phase 1 title, old Phase 2 title, or missing new Phase 2 tasks)
                         const hasOldTask1 = appState.phases[0].tasks.some(t => t.title === "פגישת אפיון והגדרת קונספט לספר");
+                        const hasOldPhase1Title = appState.phases[0].title === "שלב א': תכנון, אפיון והתקשרות";
                         const hasOldPhase2 = appState.phases.length > 1 && appState.phases[1].title === "שלב ב': כתיבה ואיסוף חומרים";
                         const missingTask2_5 = appState.phases.length > 1 && !appState.phases[1].tasks.some(t => t.title === "הפעלת צוות העריכה הראשונית של טלי");
-                        if (!hasOldTask1 && !hasOldPhase2 && !missingTask2_5) {
+                        if (!hasOldTask1 && !hasOldPhase1Title && !hasOldPhase2 && !missingTask2_5) {
                             useDefault = false;
                         }
                     }
