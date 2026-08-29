@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>צ'קליסט מעקב הפקת ספר ללקוח</title>
+    <title>לוח בקרה ומעקב הפקת ספר ללקוח</title>
     <!-- Google Font Rubik -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -44,65 +44,69 @@
             font-family: 'Rubik', sans-serif;
             background-color: #f8fafc;
         }
-        /* Custom scrollbar for better appearance */
-        ::-webkit-scrollbar {
-            width: 8px;
+        /* Custom scrollbar for tabs navigation */
+        .tabs-scrollbar::-webkit-scrollbar {
+            height: 4px;
         }
-        ::-webkit-scrollbar-track {
+        .tabs-scrollbar::-webkit-scrollbar-track {
             background: #f1f5f9;
         }
-        ::-webkit-scrollbar-thumb {
+        .tabs-scrollbar::-webkit-scrollbar-thumb {
             background: #cbd5e1;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
+            border-radius: 2px;
         }
         
         /* Print Styles - optimized for professional PDF export */
+        #print-view {
+            display: none;
+        }
         @media print {
             body {
                 background-color: white !important;
                 color: black !important;
                 font-size: 12px;
             }
-            .no-print {
+            #screen-view {
                 display: none !important;
             }
-            .print-full-width {
+            #print-view {
+                display: block !important;
                 width: 100% !important;
                 max-width: 100% !important;
                 margin: 0 !important;
                 padding: 0 !important;
             }
-            .card-print {
+            .print-card {
                 box-shadow: none !important;
                 border: 1px solid #e2e8f0 !important;
-                margin-bottom: 1rem !important;
+                margin-bottom: 1.5rem !important;
                 page-break-inside: avoid;
+                border-radius: 12px;
+                overflow: hidden;
             }
-            .task-notes-print {
-                display: block !important;
-                background-color: #f8fafc !important;
-                border-right: 3px solid #cbd5e1 !important;
-                margin-top: 4px !important;
-                padding: 6px !important;
+            .print-table {
+                width: 100%;
+                border-collapse: collapse;
             }
-            input, textarea, select {
-                border: none !important;
-                background: transparent !important;
-                padding: 0 !important;
-                resize: none !important;
+            .print-table th, .print-table td {
+                border-bottom: 1px solid #e2e8f0;
+                padding: 8px 12px;
+                text-align: right;
+            }
+            .print-table th {
+                background-color: #f8fafc;
+                font-weight: bold;
             }
             input[type="checkbox"] {
                 appearance: none;
                 -webkit-appearance: none;
                 width: 16px;
                 height: 16px;
-                border: 2px solid #000 !important;
+                border: 1.5px solid #000 !important;
                 border-radius: 3px;
                 position: relative;
                 display: inline-block;
+                vertical-align: middle;
             }
             input[type="checkbox"]:checked::after {
                 content: "✓";
@@ -113,218 +117,129 @@
                 right: 2px;
                 color: black;
             }
-            /* Force accordion expansion during print */
-            .accordion-content {
-                display: block !important;
-                max-height: none !important;
-                opacity: 1 !important;
-            }
-            .print-badge {
-                border: 1px solid #94a3b8 !important;
-                color: black !important;
-                background: white !important;
-            }
         }
     </style>
 </head>
 <body class="text-slate-800 min-h-screen flex flex-col antialiased">
 
-    <!-- Header Section -->
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm no-print">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
-            <!-- Logo & App Title -->
-            <div class="flex items-center space-x-3 space-x-reverse">
-                <div class="bg-brand-600 text-white p-2.5 rounded-xl shadow-md flex items-center justify-center">
-                    <i class="fa-solid fa-book-open text-xl"></i>
+    <!-- Screen view containing the interactive web app -->
+    <div id="screen-view" class="flex-grow flex flex-col">
+        <!-- Header Section -->
+        <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+                
+                <!-- Logo & App Title -->
+                <div class="flex items-center space-x-3 space-x-reverse">
+                    <div class="bg-brand-600 text-white p-2.5 rounded-xl shadow-md flex items-center justify-center">
+                        <i class="fa-solid fa-square-poll-horizontal text-xl"></i>
+                    </div>
+                    <div>
+                        <!-- Dynamic project title -->
+                        <h1 class="text-xl font-bold text-slate-900 tracking-tight" id="header-project-title">חיי שרה</h1>
+                        <p class="text-xs text-slate-500 font-medium">לוח בקרה להתקדמות כתיבה ועריכה</p>
+                    </div>
                 </div>
-                <div>
-                    <h1 class="text-xl font-bold text-slate-900 tracking-tight font-sans">מעקב משימות הפקת ספר</h1>
-                    <p class="text-xs text-slate-500 font-medium">מערכת ניהול וליווי לקוחות אישית</p>
+
+                <!-- Overall Progress in Header -->
+                <div class="flex items-center gap-3 w-full sm:w-auto max-w-xs flex-grow justify-end">
+                    <div class="text-left hidden sm:block">
+                        <span class="text-xs text-slate-400 font-semibold block">התקדמות כללית</span>
+                        <span class="text-sm font-bold text-slate-700" id="header-progress-percent">0%</span>
+                    </div>
+                    <div class="w-24 bg-slate-100 rounded-full h-3 overflow-hidden shadow-inner hidden sm:block">
+                        <div id="header-progress-bar" class="bg-gradient-to-l from-brand-600 to-emerald-500 h-full rounded-full transition-all duration-500 ease-out" style="width: 0%"></div>
+                    </div>
+                    
+                    <!-- Print Button -->
+                    <button onclick="printChecklist()" class="bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 font-semibold text-xs px-3.5 py-2 rounded-lg inline-flex items-center gap-1.5 transition shrink-0">
+                        <i class="fa-solid fa-print text-slate-500"></i>
+                        <span>הדפסה ל-PDF</span>
+                    </button>
                 </div>
             </div>
+        </header>
 
-            <!-- Global Action Buttons -->
-            <div class="flex flex-wrap items-center gap-2">
-                <button onclick="printChecklist()" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 font-medium text-sm px-4 py-2 rounded-lg inline-flex items-center gap-2 transition shadow-sm">
-                    <i class="fa-solid fa-print text-slate-500"></i>
-                    <span>הדפסה ל-PDF</span>
-                </button>
-                <button onclick="exportBackup()" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 font-medium text-sm px-4 py-2 rounded-lg inline-flex items-center gap-2 transition shadow-sm">
-                    <i class="fa-solid fa-download text-slate-500"></i>
-                    <span>ייצוא גיבוי</span>
-                </button>
-                <label class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 font-medium text-sm px-4 py-2 rounded-lg inline-flex items-center gap-2 transition shadow-sm cursor-pointer">
-                    <i class="fa-solid fa-upload text-slate-500"></i>
-                    <span>ייבוא גיבוי</span>
-                    <input type="file" id="importFile" accept=".json" class="hidden" onchange="importBackup(event)">
-                </label>
-                <button onclick="confirmReset()" class="bg-red-50 hover:bg-red-100 text-red-600 font-medium text-sm px-4 py-2 rounded-lg inline-flex items-center gap-2 transition border border-red-200">
-                    <i class="fa-solid fa-trash-can"></i>
-                    <span>איפוס צ'קליסט</span>
-                </button>
+        <!-- Dynamic Navigation Tabs Bar -->
+        <div class="bg-white border-b border-slate-200 sticky top-[73px] z-30 shadow-sm">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between gap-4">
+                    <!-- Tabs container with horizontal scroll support on mobile -->
+                    <nav id="tabs-navigation" class="flex space-x-8 space-x-reverse overflow-x-auto tabs-scrollbar py-1 flex-grow">
+                        <!-- Populated dynamically by JS -->
+                    </nav>
+                    
+                    <!-- Add Phase Tab-like Button -->
+                    <button onclick="promptAddNewPhase()" class="text-slate-400 hover:text-brand-600 font-semibold text-sm py-4 px-2 shrink-0 border-b-2 border-transparent hover:border-brand-400 transition" title="הוסף שלב עבודה חדש">
+                        <i class="fa-solid fa-plus-circle text-lg"></i>
+                    </button>
+                </div>
             </div>
         </div>
-    </header>
 
-    <!-- Main Content Container -->
-    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 print-full-width">
-        
-        <!-- Print-only elegant header -->
-        <div class="hidden print:block border-b-2 border-slate-900 pb-4 mb-6">
+        <!-- Main Tab Content Container -->
+        <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div id="tab-content" class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8 min-h-[400px]">
+                <!-- Populated dynamically based on activeTabId -->
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-white border-t border-slate-200 py-6 mt-12">
+            <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-400 font-sans">
+                לוח בקרה להתקדמות הפקת ספרים © 2026. כל הזכויות שמורות.
+            </div>
+        </footer>
+    </div>
+
+
+    <!-- PRINT VIEW (Only visible when printing / converting to PDF) -->
+    <div id="print-view">
+        <!-- Print Header -->
+        <div class="border-b-2 border-slate-900 pb-4 mb-6">
             <div class="flex justify-between items-end">
                 <div>
-                    <h1 class="text-2xl font-bold">דו"ח סטטוס משימות הפקת ספר</h1>
-                    <p class="text-sm text-slate-600" id="print-date"></p>
+                    <h1 class="text-2xl font-bold" id="print-project-header">חיי שרה</h1>
+                    <p class="text-sm text-slate-500">לוח בקרה ומעקב התקדמות הפקת ספר</p>
+                    <p class="text-xs text-slate-400 mt-1" id="print-date"></p>
                 </div>
                 <div class="text-left">
-                    <span class="text-sm font-semibold">סטטוס התקדמות כללי: </span>
+                    <span class="text-sm font-semibold">אחוז התקדמות כללי: </span>
                     <span class="text-lg font-bold text-brand-700" id="print-progress-val">0%</span>
                 </div>
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-            
-            <!-- RIGHT COLUMN: Client Details Card & Progress (Sticky on Large Screens) -->
-            <div class="lg:col-span-4 lg:sticky lg:top-24 gap-6 flex flex-col print-full-width no-print">
-                
-                <!-- Client Details Card -->
-                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 overflow-hidden relative">
-                    <div class="absolute top-0 right-0 left-0 h-1.5 bg-brand-600"></div>
-                    
-                    <h2 class="text-lg font-bold text-slate-900 mb-5 flex items-center gap-2">
-                        <i class="fa-solid fa-user-tie text-brand-600"></i>
-                        <span>פרטי לקוח</span>
-                    </h2>
-                    
-                    <div class="space-y-4">
-                        <!-- Client Name -->
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1" for="client-name-input">שם הלקוח</label>
-                            <div class="relative">
-                                <input type="text" id="client-name-input" class="w-full bg-slate-50 hover:bg-slate-100/70 focus:bg-white border border-slate-200 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 rounded-xl px-4 py-2.5 text-base font-semibold text-slate-800 transition outline-none font-sans" placeholder="הזן שם לקוח..." oninput="updateClientField('name', this.value)">
-                            </div>
-                        </div>
-
-                        <!-- Client Phone -->
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1" for="client-phone-input">מספר טלפון</label>
-                            <div class="relative">
-                                <span class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400">
-                                    <i class="fa-solid fa-phone text-sm"></i>
-                                </span>
-                                <input type="tel" id="client-phone-input" class="w-full bg-slate-50 hover:bg-slate-100/70 focus:bg-white border border-slate-200 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 rounded-xl pr-9 pl-4 py-2.5 text-sm transition outline-none" placeholder="הזן מספר טלפון..." oninput="updateClientField('phone', this.value)">
-                            </div>
-                        </div>
-
-                        <!-- Client Email -->
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1" for="client-email-input">כתובת אימייל</label>
-                            <div class="relative">
-                                <span class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400">
-                                    <i class="fa-solid fa-envelope text-sm"></i>
-                                </span>
-                                <input type="email" id="client-email-input" class="w-full bg-slate-50 hover:bg-slate-100/70 focus:bg-white border border-slate-200 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 rounded-xl pr-9 pl-4 py-2.5 text-sm transition outline-none text-left" placeholder="example@mail.com" style="direction: ltr;" oninput="updateClientField('email', this.value)">
-                            </div>
-                        </div>
-                    </div>
+        <!-- Print Customer Info Section -->
+        <div class="print-card bg-slate-50 p-4 mb-6">
+            <h3 class="text-sm font-bold text-slate-800 border-b border-slate-200 pb-2 mb-3">פרטי לקוח ואיש קשר</h3>
+            <div class="grid grid-cols-3 gap-4 text-xs">
+                <div>
+                    <span class="text-slate-500 block">לקוח:</span>
+                    <span class="font-bold text-slate-900" id="print-client-name">-</span>
                 </div>
-
-                <!-- Progress & Stats Card -->
-                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
-                    <h2 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
-                        <i class="fa-solid fa-chart-line text-emerald-600"></i>
-                        <span>התקדמות כללית</span>
-                    </h2>
-
-                    <!-- Large Progress Circle/Bar -->
-                    <div class="space-y-4">
-                        <div class="flex justify-between items-center text-sm font-medium">
-                            <span class="text-slate-500">משימות שהושלמו</span>
-                            <span class="text-slate-900 font-semibold" id="tasks-ratio">0/0</span>
-                        </div>
-                        <div class="w-full bg-slate-100 rounded-full h-4 overflow-hidden relative shadow-inner">
-                            <div id="overall-progress-bar" class="bg-gradient-to-l from-brand-600 to-emerald-500 h-full rounded-full transition-all duration-500 ease-out" style="width: 0%"></div>
-                        </div>
-                        <div class="text-center font-bold text-2xl text-slate-800" id="overall-progress-percent">
-                            0%
-                        </div>
-                    </div>
-
-                    <!-- Stage breakdown list -->
-                    <div class="mt-6 pt-5 border-t border-slate-100 space-y-2">
-                        <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-2">התקדמות לפי שלבים</span>
-                        <div id="phases-mini-list" class="space-y-2.5">
-                            <!-- Populated by JS -->
-                        </div>
-                    </div>
+                <div>
+                    <span class="text-slate-500 block">טלפון:</span>
+                    <span class="font-bold text-slate-900" id="print-client-phone">-</span>
                 </div>
-
-                <!-- User tips and notes helper -->
-                <div class="bg-slate-100 rounded-xl p-4 border border-slate-200 text-xs text-slate-600 leading-relaxed">
-                    <h3 class="font-bold mb-1 text-slate-700 flex items-center gap-1">
-                        <i class="fa-solid fa-lightbulb text-amber-500 text-sm"></i>
-                        כיצד להשתמש בצ'קליסט?
-                    </h3>
-                    <ul class="list-disc list-inside space-y-1 pr-1">
-                        <li>הצ'קליסט נשמר אוטומטית בדפדפן לאחר כל עדכון.</li>
-                        <li>לשמירה כ-PDF, לחצו על כפתור "הדפסה ל-PDF" ובחרו "Save as PDF" בדפדפן.</li>
-                        <li>ניתן לערוך ישירות את שמות המשימות על ידי לחיצה עליהן.</li>
-                    </ul>
+                <div>
+                    <span class="text-slate-500 block">אימייל:</span>
+                    <span class="font-bold text-slate-900" id="print-client-email">-</span>
                 </div>
             </div>
-
-            <!-- LEFT COLUMN (Main): The Checklist Phases -->
-            <div class="lg:col-span-8 space-y-6 print-full-width">
-                
-                <!-- Print only Customer details header -->
-                <div class="hidden print:block bg-slate-50 border border-slate-200 rounded-xl p-4 mb-6">
-                    <h3 class="text-sm font-bold text-slate-800 border-b border-slate-200 pb-2 mb-3">פרטי לקוח ואיש קשר</h3>
-                    <div class="grid grid-cols-3 gap-4 text-xs">
-                        <div>
-                            <span class="text-slate-500 block">לקוח:</span>
-                            <span class="font-bold text-slate-900" id="print-client-name">-</span>
-                        </div>
-                        <div>
-                            <span class="text-slate-500 block">טלפון:</span>
-                            <span class="font-bold text-slate-900" id="print-client-phone">-</span>
-                        </div>
-                        <div>
-                            <span class="text-slate-500 block">אימייל:</span>
-                            <span class="font-bold text-slate-900" id="print-client-email">-</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Categories Checklist Accordions -->
-                <div id="phases-container" class="space-y-4 print:space-y-6">
-                    <!-- Populated Dynamically by JS -->
-                </div>
-                
-                <!-- Add Phase custom action -->
-                <div class="no-print pt-2">
-                    <button onclick="promptAddNewPhase()" class="w-full bg-white hover:bg-slate-50 text-slate-600 hover:text-brand-600 border-2 border-dashed border-slate-300 hover:border-brand-400 font-semibold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition">
-                        <i class="fa-solid fa-plus-circle text-lg"></i>
-                        <span>הוספת שלב עבודה חדש לצ'קליסט</span>
-                    </button>
-                </div>
-            </div>
-            
         </div>
-    </main>
 
-    <!-- Footer -->
-    <footer class="bg-white border-t border-slate-200 mt-12 py-6 no-print">
-        <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-400 font-sans">
-            צ'קליסט מעקב ליווי והפקת ספרים © 2026. כל הזכויות שמורות.
+        <!-- Print Stages Container (Fully rendered sequentially) -->
+        <div id="print-phases-list" class="space-y-6">
+            <!-- Populated dynamically on print trigger -->
         </div>
-    </footer>
+    </div>
 
-    <!-- Templates & Scripts -->
+
+    <!-- JavaScript State & Logic -->
     <script>
         // Default initial application state
         const defaultState = {
-            clientName: "לקוח לדוגמה",
+            clientName: "חיי שרה",
             clientPhone: "050-0000000",
             clientEmail: "client@example.com",
             phases: [
@@ -386,8 +301,10 @@
 
         // Application State
         let appState = null;
-        // Tracking accordion state (open/closed phases)
-        let openPhases = {};
+        // Tracking active tab (default is 'client-details')
+        let activeTabId = "client-details";
+        // Expanded task notes tracker
+        let expandedNotes = {};
 
         // Load data from LocalStorage or initialize default
         function initApp() {
@@ -411,262 +328,389 @@
                 appState = JSON.parse(JSON.stringify(defaultState));
             }
 
-            // Initialize accordion states to true (open) by default for all phases
-            appState.phases.forEach(p => {
-                if (openPhases[p.id] === undefined) {
-                    openPhases[p.id] = true;
-                }
-            });
-
-            // Set input values to match state
-            document.getElementById("client-name-input").value = appState.clientName || "";
-            document.getElementById("client-phone-input").value = appState.clientPhone || "";
-            document.getElementById("client-email-input").value = appState.clientEmail || "";
-
-            // Render current date in print view
-            const now = new Date();
-            document.getElementById("print-date").innerText = `תאריך הפקה: ${now.toLocaleDateString('he-IL')} | שעה: ${now.toLocaleTimeString('he-IL', {hour: '2-digit', minute:'2-digit'})}`;
+            // Load active tab from localStorage if exists
+            const storedTab = localStorage.getItem("activeTabId");
+            if (storedTab) {
+                activeTabId = storedTab;
+            }
 
             saveAndRender();
         }
 
-        // Save state to localstorage and re-render dynamic components
+        // Save state to localstorage and re-render navigation + active content
         function saveAndRender() {
             localStorage.setItem("customerBookChecklist", JSON.stringify(appState));
+            localStorage.setItem("activeTabId", activeTabId);
+
+            // Sync Header Project Name
+            document.getElementById("header-project-title").innerText = appState.clientName || "פרויקט ללא שם";
             
-            // Sync print header fields
-            document.getElementById("print-client-name").innerText = appState.clientName || "-";
-            document.getElementById("print-client-phone").innerText = appState.clientPhone || "-";
-            document.getElementById("print-client-email").innerText = appState.clientEmail || "-";
-            
-            calculateProgress();
-            renderPhases();
+            updateProgressPercentage();
+            renderTabs();
+            renderActiveTabContent();
+            renderPrintView();
         }
 
-        // Update basic client fields
-        function updateClientField(field, value) {
-            if (field === 'name') appState.clientName = value;
-            if (field === 'phone') appState.clientPhone = value;
-            if (field === 'email') appState.clientEmail = value;
-            
-            // Save immediately but avoid full render of list to prevent losing focus
-            localStorage.setItem("customerBookChecklist", JSON.stringify(appState));
-            document.getElementById(`print-client-${field}`).innerText = value || "-";
-        }
+        // Calculate and update progress indicators
+        function updateProgressPercentage() {
+            let total = 0;
+            let completed = 0;
 
-        // Calculate and render progress metrics
-        function calculateProgress() {
-            let totalTasks = 0;
-            let completedTasks = 0;
-
-            appState.phases.forEach(phase => {
-                totalTasks += phase.tasks.length;
-                completedTasks += phase.tasks.filter(t => t.completed).length;
+            appState.phases.forEach(p => {
+                total += p.tasks.length;
+                completed += p.tasks.filter(t => t.completed).length;
             });
 
-            const percent = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+            const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
             
-            // Update UI elements
-            document.getElementById("tasks-ratio").innerText = `${completedTasks} מתוך ${totalTasks}`;
-            document.getElementById("overall-progress-bar").style.width = `${percent}%`;
-            document.getElementById("overall-progress-percent").innerText = `${percent}%`;
+            // Header progress
+            document.getElementById("header-progress-percent").innerText = `${percent}%`;
+            document.getElementById("header-progress-bar").style.width = `${percent}%`;
             
-            // Update Print header progress
+            // Print progress
             document.getElementById("print-progress-val").innerText = `${percent}%`;
+        }
 
-            // Render mini-list of phase progress in sidebar
-            const miniListHtml = appState.phases.map(phase => {
-                const phaseTotal = phase.tasks.length;
-                const phaseDone = phase.tasks.filter(t => t.completed).length;
-                const phasePercent = phaseTotal > 0 ? Math.round((phaseDone / phaseTotal) * 100) : 0;
+        // Switch active tab
+        function setActiveTab(tabId) {
+            activeTabId = tabId;
+            saveAndRender();
+        }
+
+        // Render Tabs Navigation Row
+        function renderTabs() {
+            const nav = document.getElementById("tabs-navigation");
+            
+            // Client details tab template
+            const clientActive = activeTabId === "client-details";
+            let tabsHtml = `
+                <button onclick="setActiveTab('client-details')" class="flex items-center gap-2 py-4 px-1 border-b-2 font-semibold text-sm shrink-0 transition ${clientActive ? 'border-brand-600 text-brand-600' : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'}">
+                    <i class="fa-solid fa-user-tie text-base"></i>
+                    <span>פרטי לקוח</span>
+                </button>
+            `;
+
+            // Loop phases and build tabs
+            appState.phases.forEach(phase => {
+                const isActive = activeTabId === phase.id;
+                const total = phase.tasks.length;
+                const completed = phase.tasks.filter(t => t.completed).length;
+                const isAllCompleted = total > 0 && total === completed;
+
+                tabsHtml += `
+                    <button onclick="setActiveTab('${phase.id}')" class="flex items-center gap-2 py-4 px-1 border-b-2 font-semibold text-sm shrink-0 transition ${isActive ? 'border-brand-600 text-brand-600' : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'}">
+                        <span>${escapeHtml(phase.title)}</span>
+                        <span class="text-xs px-1.5 py-0.5 rounded-full ${isAllCompleted ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-600'}">
+                            ${completed}/${total}
+                        </span>
+                    </button>
+                `;
+            });
+
+            nav.innerHTML = tabsHtml;
+        }
+
+        // Render Active Tab Content Area
+        function renderActiveTabContent() {
+            const contentDiv = document.getElementById("tab-content");
+
+            if (activeTabId === "client-details") {
+                // Client details tab view
+                contentDiv.innerHTML = `
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+                        <!-- Left Panel: Client Info Form -->
+                        <div class="md:col-span-6 space-y-6">
+                            <h2 class="text-xl font-bold text-slate-900 border-b border-slate-100 pb-3 flex items-center gap-2">
+                                <i class="fa-solid fa-address-card text-brand-600"></i>
+                                <span>כרטיס פרטי לקוח</span>
+                            </h2>
+                            
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">שם הלקוח / הפרויקט</label>
+                                    <input type="text" id="client-name-input" value="${escapeHtml(appState.clientName)}" onchange="updateClientField('name', this.value)" class="w-full bg-slate-50 hover:bg-slate-100/50 focus:bg-white border border-slate-200 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 rounded-xl px-4 py-3 text-base font-semibold text-slate-800 outline-none transition font-sans" placeholder="למשל: חיי שרה">
+                                </div>
+
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">מספר טלפון ליצירת קשר</label>
+                                    <input type="tel" id="client-phone-input" value="${escapeHtml(appState.clientPhone)}" onchange="updateClientField('phone', this.value)" class="w-full bg-slate-50 hover:bg-slate-100/50 focus:bg-white border border-slate-200 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 rounded-xl px-4 py-3 text-sm text-slate-700 outline-none transition" placeholder="למשל: 050-1234567">
+                                </div>
+
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">כתובת אימייל</label>
+                                    <input type="email" id="client-email-input" value="${escapeHtml(appState.clientEmail)}" onchange="updateClientField('email', this.value)" class="w-full bg-slate-50 hover:bg-slate-100/50 focus:bg-white border border-slate-200 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 rounded-xl px-4 py-3 text-sm text-slate-700 outline-none transition text-left" style="direction: ltr;" placeholder="example@mail.com">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Panel: Overall Statistics & Actions -->
+                        <div class="md:col-span-6 flex flex-col justify-between space-y-6">
+                            <div>
+                                <h2 class="text-xl font-bold text-slate-900 border-b border-slate-100 pb-3 flex items-center gap-2">
+                                    <i class="fa-solid fa-chart-pie text-emerald-600"></i>
+                                    <span>סטטוס התקדמות מפורט</span>
+                                </h2>
+                                
+                                <div class="mt-4 space-y-3.5" id="detailed-stats-container">
+                                    <!-- Populated below -->
+                                </div>
+                            </div>
+
+                            <!-- Danger and Utility Action Buttons -->
+                            <div class="pt-6 border-t border-slate-100 flex flex-wrap gap-2.5">
+                                <button onclick="exportBackup()" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 font-semibold text-xs px-4 py-2.5 rounded-lg inline-flex items-center gap-1.5 transition shadow-sm">
+                                    <i class="fa-solid fa-download text-slate-400"></i>
+                                    <span>ייצוא קובץ גיבוי</span>
+                                </button>
+                                <label class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 font-semibold text-xs px-4 py-2.5 rounded-lg inline-flex items-center gap-1.5 transition shadow-sm cursor-pointer">
+                                    <i class="fa-solid fa-upload text-slate-400"></i>
+                                    <span>ייבוא קובץ גיבוי</span>
+                                    <input type="file" id="importFile" accept=".json" class="hidden" onchange="importBackup(event)">
+                                </label>
+                                <button onclick="confirmReset()" class="bg-red-50 hover:bg-red-100 text-red-600 font-semibold text-xs px-4 py-2.5 rounded-lg inline-flex items-center gap-1.5 border border-red-100 transition mr-auto">
+                                    <i class="fa-solid fa-trash-can text-red-400"></i>
+                                    <span>איפוס מלא</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                // Render Phase Stats in Client Details
+                let statsHtml = "";
+                appState.phases.forEach(phase => {
+                    const total = phase.tasks.length;
+                    const completed = phase.tasks.filter(t => t.completed).length;
+                    const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
+                    
+                    statsHtml += `
+                        <div>
+                            <div class="flex justify-between text-xs font-semibold mb-1">
+                                <span class="text-slate-600">${escapeHtml(phase.title)}</span>
+                                <span class="text-slate-800 font-bold">${percent}% (${completed}/${total})</span>
+                            </div>
+                            <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
+                                <div class="bg-brand-500 h-full transition-all duration-300" style="width: ${percent}%"></div>
+                            </div>
+                        </div>
+                    `;
+                });
+                document.getElementById("detailed-stats-container").innerHTML = statsHtml || `<p class="text-slate-400 text-sm">אין שלבי עבודה מוגדרים.</p>`;
                 
-                return `
-                    <div class="flex flex-col gap-1">
-                        <div class="flex justify-between text-xs font-medium">
-                            <span class="text-slate-600 truncate max-w-[170px]">${phase.title}</span>
-                            <span class="text-slate-800 font-bold">${phasePercent}%</span>
-                        </div>
-                        <div class="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
-                            <div class="bg-brand-500 h-full" style="width: ${phasePercent}%"></div>
-                        </div>
-                    </div>
-                `;
-            }).join("");
-
-            document.getElementById("phases-mini-list").innerHTML = miniListHtml;
-        }
-
-        // Toggle phase accordion state
-        function toggleAccordion(phaseId) {
-            openPhases[phaseId] = !openPhases[phaseId];
-            const content = document.getElementById(`accordion-content-${phaseId}`);
-            const chevron = document.getElementById(`chevron-${phaseId}`);
-            
-            if (openPhases[phaseId]) {
-                content.classList.remove("hidden");
-                chevron.classList.add("rotate-180");
             } else {
-                content.classList.add("hidden");
-                chevron.classList.remove("rotate-180");
-            }
-        }
+                // Phase tasks view
+                const activePhase = appState.phases.find(p => p.id === activeTabId);
+                if (!activePhase) {
+                    // Falls back to details if phase not found
+                    activeTabId = "client-details";
+                    saveAndRender();
+                    return;
+                }
 
-        // Render the phases and tasks
-        function renderPhases() {
-            const container = document.getElementById("phases-container");
-            
-            if (appState.phases.length === 0) {
-                container.innerHTML = `
-                    <div class="bg-white rounded-2xl border border-slate-200 p-8 text-center text-slate-500 shadow-sm">
-                        <i class="fa-solid fa-folder-open text-4xl text-slate-300 mb-3 block"></i>
-                        <p class="font-medium text-slate-700">אין שלבי עבודה בצ'קליסט.</p>
-                        <p class="text-xs text-slate-400 mt-1">לחץ על הכפתור למטה כדי להוסיף שלב מותאם אישית.</p>
-                    </div>
+                const phaseTotal = activePhase.tasks.length;
+                const phaseDone = activePhase.tasks.filter(t => t.completed).length;
+
+                // Template for Phase Card
+                let html = `
+                    <div class="space-y-6">
+                        <!-- Phase Header Title & Delete -->
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-4 gap-4">
+                            <div class="flex-grow min-w-0">
+                                <input type="text" 
+                                       value="${escapeHtml(activePhase.title)}"
+                                       onchange="updatePhaseTitle('${activePhase.id}', this.value)"
+                                       class="font-bold text-slate-800 text-lg sm:text-xl bg-transparent border-b border-transparent hover:border-slate-300 focus:border-brand-500 px-2 py-0.5 rounded outline-none transition focus:bg-white w-full font-sans">
+                            </div>
+                            
+                            <div class="flex items-center gap-3 shrink-0">
+                                <span class="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-600 rounded-full border border-slate-200">
+                                    ${phaseDone} / ${phaseTotal} הושלמו
+                                </span>
+                                
+                                <button onclick="deletePhase('${activePhase.id}')" 
+                                        title="מחק שלב זה לגמרי"
+                                        class="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition">
+                                    <i class="fa-solid fa-trash-can text-base"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Sub-steps (Tasks) list -->
+                        <div class="divide-y divide-slate-100">
                 `;
-                return;
-            }
 
-            container.innerHTML = appState.phases.map((phase, phaseIndex) => {
-                const phaseTotal = phase.tasks.length;
-                const phaseDone = phase.tasks.filter(t => t.completed).length;
-                const isOpen = openPhases[phase.id] !== false;
-
-                // Build Tasks List HTML
-                let tasksHtml = "";
                 if (phaseTotal === 0) {
-                    tasksHtml = `
-                        <div class="text-center py-6 text-slate-400 text-sm border border-dashed border-slate-200 rounded-xl mb-4">
-                            <i class="fa-solid fa-list-check text-slate-300 mb-1.5 block text-lg"></i>
-                            אין משימות בשלב זה עדיין.
+                    html += `
+                        <div class="text-center py-12 text-slate-400 text-sm">
+                            <i class="fa-solid fa-list-check text-4xl text-slate-200 mb-3 block"></i>
+                            אין עדיין משימות בשלב עבודה זה.
+                            <button onclick="addNewTask('${activePhase.id}')" class="text-brand-600 hover:text-brand-700 hover:underline font-bold block mx-auto mt-2">לחץ להוספת משימה ראשונה</button>
                         </div>
                     `;
                 } else {
-                    tasksHtml = phase.tasks.map(task => {
+                    activePhase.tasks.forEach(task => {
                         const isCompleted = task.completed;
                         const isPastDue = task.dueDate && new Date(task.dueDate) < new Date() && !isCompleted;
-                        
-                        return `
-                            <div id="task-row-${task.id}" class="group border-b border-slate-100 last:border-b-0 py-3.5 print:py-2">
+                        const isNotesOpen = expandedNotes[task.id] === true;
+
+                        html += `
+                            <div id="task-row-${task.id}" class="group py-4">
                                 <div class="flex items-start justify-between gap-3">
                                     
                                     <!-- Checkbox and Task Title -->
-                                    <div class="flex items-start gap-3 flex-grow">
+                                    <div class="flex items-start gap-3 flex-grow min-w-0">
                                         <input type="checkbox" 
                                                ${isCompleted ? 'checked' : ''} 
-                                               onchange="toggleTask('${phase.id}', '${task.id}')"
+                                               onchange="toggleTask('${activePhase.id}', '${task.id}')"
                                                class="w-5 h-5 rounded border-slate-300 text-brand-600 focus:ring-brand-500 mt-1 cursor-pointer transition">
                                         
-                                        <div class="flex-grow">
+                                        <div class="flex-grow min-w-0">
                                             <!-- Inline editable task title -->
                                             <input type="text" 
                                                    value="${escapeHtml(task.title)}"
-                                                   onchange="updateTaskTitle('${phase.id}', '${task.id}', this.value)"
+                                                   onchange="updateTaskTitle('${activePhase.id}', '${task.id}', this.value)"
                                                    placeholder="שם המשימה..."
                                                    class="w-full bg-transparent border-b border-transparent hover:border-slate-200 focus:border-brand-500 px-1.5 py-0.5 rounded font-medium text-slate-800 outline-none transition focus:bg-white font-sans ${isCompleted ? 'line-through text-slate-400 font-normal' : ''}">
-                                            
-                                            <!-- Print only notes container -->
-                                            ${task.notes ? `<div class="hidden print:block text-[11px] text-slate-600 mt-1 bg-slate-50 border-r-2 border-slate-300 pr-2 py-0.5">${escapeHtml(task.notes)}</div>` : ''}
                                         </div>
                                     </div>
 
                                     <!-- Controls: Date and Actions -->
-                                    <div class="flex items-center gap-2 no-print shrink-0">
+                                    <div class="flex items-center gap-2 shrink-0">
                                         
                                         <!-- Due Date Badge & Picker -->
                                         <div class="relative flex items-center">
                                             <input type="date" 
                                                    value="${task.dueDate || ''}" 
-                                                   onchange="updateTaskDueDate('${phase.id}', '${task.id}', this.value)"
-                                                   class="text-xs bg-slate-50 border border-slate-200 rounded px-1.5 py-1 text-slate-500 focus:outline-none focus:border-brand-500 font-sans ${isPastDue ? 'border-red-300 text-red-600 bg-red-50' : ''}">
+                                                   onchange="updateTaskDueDate('${activePhase.id}', '${task.id}', this.value)"
+                                                   class="text-xs bg-slate-50 border border-slate-200 rounded-lg px-2 py-1.5 text-slate-500 focus:outline-none focus:border-brand-500 font-sans ${isPastDue ? 'border-red-300 text-red-600 bg-red-50' : ''}">
                                         </div>
 
                                         <!-- Notes Toggle Button -->
                                         <button onclick="toggleNotesRow('${task.id}')" 
                                                 title="הוסף / ערוך הערות"
-                                                class="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded transition ${task.notes ? 'text-brand-600 hover:text-brand-700 bg-brand-50' : ''}">
+                                                class="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition ${task.notes ? 'text-brand-600 hover:text-brand-700 bg-brand-50' : ''}">
                                             <i class="fa-solid fa-comment-dots text-sm"></i>
                                         </button>
 
                                         <!-- Delete Task Button -->
-                                        <button onclick="deleteTask('${phase.id}', '${task.id}')" 
+                                        <button onclick="deleteTask('${activePhase.id}', '${task.id}')" 
                                                 title="מחק משימה"
-                                                class="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded transition md:opacity-0 group-hover:opacity-100">
+                                                class="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition md:opacity-0 group-hover:opacity-100">
                                             <i class="fa-solid fa-trash-can text-sm"></i>
                                         </button>
                                     </div>
                                 </div>
 
-                                <!-- Collapsible Notes Textarea (dynamic toggled show/hide) -->
-                                <div id="notes-container-${task.id}" class="mr-8 mt-2 max-w-full ${task.notes ? '' : 'hidden'} no-print">
+                                <!-- Collapsible Notes Textarea -->
+                                <div id="notes-container-${task.id}" class="mr-8 mt-2 max-w-full ${isNotesOpen || task.notes ? '' : 'hidden'}">
                                     <textarea 
-                                        placeholder="הערות או הנחיות מיוחדות למשימה זו..." 
-                                        onchange="updateTaskNotes('${phase.id}', '${task.id}', this.value)"
+                                        placeholder="רשום כאן הערות, הנחיות או קישורים מיוחדים עבור תת-שלב זה..." 
+                                        onchange="updateTaskNotes('${activePhase.id}', '${task.id}', this.value)"
                                         class="w-full text-xs text-slate-600 bg-slate-50 focus:bg-white border border-slate-200 focus:border-brand-500 rounded-lg p-2.5 outline-none resize-none transition"
                                         rows="2">${escapeHtml(task.notes || "")}</textarea>
                                 </div>
                             </div>
                         `;
-                    }).join("");
+                    });
                 }
 
-                // Phase Card template
-                return `
-                    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden card-print" id="phase-card-${phase.id}">
-                        <!-- Phase Header -->
-                        <div class="bg-slate-50/70 border-b border-slate-200 px-6 py-4 flex items-center justify-between gap-4 cursor-pointer no-select" onclick="toggleAccordion('${phase.id}')">
-                            <div class="flex items-center gap-3 flex-grow min-w-0">
-                                <button class="text-slate-400 hover:text-slate-600 no-print flex items-center justify-center shrink-0">
-                                    <i id="chevron-${phase.id}" class="fa-solid fa-chevron-down transition-transform ${isOpen ? 'rotate-180' : ''}"></i>
-                                </button>
-                                
-                                <!-- Editable Phase Title -->
-                                <input type="text" 
-                                       value="${escapeHtml(phase.title)}"
-                                       onclick="event.stopPropagation();"
-                                       onchange="updatePhaseTitle('${phase.id}', this.value)"
-                                       class="font-bold text-slate-800 bg-transparent border-b border-transparent hover:border-slate-300 focus:border-brand-500 px-2 py-0.5 rounded outline-none transition focus:bg-white w-full text-base truncate font-sans">
-                            </div>
-                            
-                            <!-- Badges & Actions -->
-                            <div class="flex items-center gap-3 shrink-0">
-                                <span class="text-xs font-semibold px-2.5 py-1 bg-slate-200 text-slate-600 rounded-full print-badge shrink-0">
-                                    ${phaseDone} / ${phaseTotal} הושלמו
-                                </span>
-                                
-                                <!-- Phase Delete (Only no-print) -->
-                                <button onclick="event.stopPropagation(); deletePhase('${phase.id}')" 
-                                        title="מחק שלב זה"
-                                        class="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded transition no-print">
-                                    <i class="fa-solid fa-folder-minus text-sm"></i>
-                                </button>
-                            </div>
+                html += `
                         </div>
 
-                        <!-- Phase Tasks Wrapper -->
-                        <div id="accordion-content-${phase.id}" class="accordion-content px-6 py-2 ${isOpen ? '' : 'hidden'}">
-                            <div class="divide-y divide-slate-100">
-                                ${tasksHtml}
-                            </div>
-                            
-                            <!-- Add task button inside phase -->
-                            <div class="py-4 border-t border-slate-100 flex justify-end no-print">
-                                <button onclick="addNewTask('${phase.id}')" class="text-xs text-brand-600 hover:text-brand-700 hover:underline font-bold inline-flex items-center gap-1">
-                                    <i class="fa-solid fa-plus-circle"></i>
-                                    <span>הוספת משימה לשלב זה</span>
-                                </button>
-                            </div>
+                        <!-- Add task button inside phase -->
+                        <div class="pt-4 border-t border-slate-100 flex justify-end">
+                            <button onclick="addNewTask('${activePhase.id}')" class="bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs px-4 py-2.5 rounded-lg inline-flex items-center gap-1.5 transition shadow-sm">
+                                <i class="fa-solid fa-plus-circle"></i>
+                                <span>הוספת תת-שלב (משימה)</span>
+                            </button>
                         </div>
                     </div>
                 `;
-            }).join("");
+
+                contentDiv.innerHTML = html;
+            }
+        }
+
+        // Generate Print-Optimized sequential layout for PDF Export
+        function renderPrintView() {
+            // Update static info fields
+            document.getElementById("print-project-header").innerText = appState.clientName || "פרויקט ללא שם";
+            document.getElementById("print-client-name").innerText = appState.clientName || "-";
+            document.getElementById("print-client-phone").innerText = appState.clientPhone || "-";
+            document.getElementById("print-client-email").innerText = appState.clientEmail || "-";
+
+            const printPhasesDiv = document.getElementById("print-phases-list");
+            
+            let html = "";
+            appState.phases.forEach((phase) => {
+                const total = phase.tasks.length;
+                const completed = phase.tasks.filter(t => t.completed).length;
+                
+                let tasksRows = "";
+                if (total === 0) {
+                    tasksRows = `<tr><td colspan="3" class="text-center text-slate-400 text-xs py-4">אין משימות בשלב זה.</td></tr>`;
+                } else {
+                    phase.tasks.forEach(task => {
+                        const dateFormatted = task.dueDate ? new Date(task.dueDate).toLocaleDateString('he-IL') : "-";
+                        tasksRows += `
+                            <tr>
+                                <td style="width: 40px; text-align: center;">
+                                    <input type="checkbox" ${task.completed ? 'checked' : ''} disabled>
+                                </td>
+                                <td>
+                                    <div class="font-semibold text-slate-800">${escapeHtml(task.title)}</div>
+                                    ${task.notes ? `<div class="text-[10px] text-slate-500 mt-0.5 bg-slate-50 border-r-2 border-slate-300 pr-2 py-0.5">${escapeHtml(task.notes)}</div>` : ''}
+                                </td>
+                                <td style="width: 110px;" class="text-slate-600 text-xs font-sans">${dateFormatted}</td>
+                            </tr>
+                        `;
+                    });
+                }
+
+                html += `
+                    <div class="print-card">
+                        <div class="bg-slate-100 border-b border-slate-200 px-4 py-2.5 flex justify-between items-center">
+                            <span class="font-bold text-slate-800">${escapeHtml(phase.title)}</span>
+                            <span class="text-xs font-bold text-slate-600">${completed} / ${total} הושלמו</span>
+                        </div>
+                        <table class="print-table text-xs">
+                            <thead>
+                                <tr>
+                                    <th style="width: 40px; text-align: center;">בוצע</th>
+                                    <th>פרטי המשימה</th>
+                                    <th style="width: 110px;">תאריך יעד</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${tasksRows}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            });
+
+            printPhasesDiv.innerHTML = html || `<p class="text-center text-slate-400 py-6 text-sm">אין משימות להצגה.</p>`;
         }
 
         // Toggle state of notes textbox
         function toggleNotesRow(taskId) {
+            expandedNotes[taskId] = !expandedNotes[taskId];
             const container = document.getElementById(`notes-container-${taskId}`);
             if (container) {
                 container.classList.toggle("hidden");
             }
+        }
+
+        // Update client info fields
+        function updateClientField(field, value) {
+            if (field === 'name') {
+                appState.clientName = value.trim() || "חיי שרה";
+                document.getElementById("header-project-title").innerText = appState.clientName;
+            }
+            if (field === 'phone') appState.clientPhone = value.trim();
+            if (field === 'email') appState.clientEmail = value.trim();
+            
+            saveAndRender();
         }
 
         // Toggle task completed checkbox
@@ -724,14 +768,11 @@
                 const newId = "task-" + Date.now() + "-" + Math.floor(Math.random() * 1000);
                 phase.tasks.push({
                     id: newId,
-                    title: "משימה חדשה",
+                    title: "תת-שלב חדש",
                     completed: false,
                     dueDate: "",
                     notes: ""
                 });
-                
-                // Keep the phase open when adding
-                openPhases[phaseId] = true;
                 
                 saveAndRender();
                 
@@ -769,9 +810,10 @@
 
         // Delete a complete phase
         function deletePhase(phaseId) {
-            if (confirm("האם אתה בטוח שברצונך למחוק את כל שלב העבודה הזה יחד עם כל המשימות שבתוכו?")) {
+            if (confirm("האם אתה בטוח שברצונך למחוק את כל שלב העבודה הזה יחד עם כל תתי-השלבים (המשימות) שבתוכו?")) {
                 appState.phases = appState.phases.filter(p => p.id !== phaseId);
-                delete openPhases[phaseId];
+                // Fallback tab
+                activeTabId = "client-details";
                 saveAndRender();
             }
         }
@@ -786,13 +828,16 @@
                     title: title.trim(),
                     tasks: []
                 });
-                openPhases[phaseId] = true;
+                activeTabId = phaseId;
                 saveAndRender();
             }
         }
 
         // Print page helper
         function printChecklist() {
+            // Render print date
+            const now = new Date();
+            document.getElementById("print-date").innerText = `תאריך הפקה: ${now.toLocaleDateString('he-IL')} | שעה: ${now.toLocaleTimeString('he-IL', {hour: '2-digit', minute:'2-digit'})}`;
             window.print();
         }
 
@@ -824,19 +869,7 @@
                     // Simple structural validation
                     if (imported.phases && Array.isArray(imported.phases)) {
                         appState = imported;
-                        
-                        // Sync UI input values
-                        document.getElementById("client-name-input").value = appState.clientName || "";
-                        document.getElementById("client-phone-input").value = appState.clientPhone || "";
-                        document.getElementById("client-email-input").value = appState.clientEmail || "";
-                        
-                        // Ensure all imported phases have accordion open
-                        appState.phases.forEach(p => {
-                            if (openPhases[p.id] === undefined) {
-                                openPhases[p.id] = true;
-                            }
-                        });
-
+                        activeTabId = "client-details";
                         saveAndRender();
                         alert("הגיבוי יובא בהצלחה!");
                     } else {
@@ -854,18 +887,10 @@
 
         // Reset system confirm
         function confirmReset() {
-            if (confirm("האם אתה בטוח שברצונך לאפס את ה-Checklist? כל המשימות המותאמות ופרטי הלקוח יימחקו והמערכת תחזור לברירת המחדל.")) {
+            if (confirm("האם אתה בטוח שברצונך לאפס את הלוח? כל המשימות והשלבים המותאמים ופרטי הלקוח יימחקו והמערכת תחזור לברירת המחדל.")) {
                 appState = JSON.parse(JSON.stringify(defaultState));
-                
-                document.getElementById("client-name-input").value = appState.clientName;
-                document.getElementById("client-phone-input").value = appState.clientPhone;
-                document.getElementById("client-email-input").value = appState.clientEmail;
-                
-                openPhases = {};
-                appState.phases.forEach(p => {
-                    openPhases[p.id] = true;
-                });
-
+                activeTabId = "client-details";
+                expandedNotes = {};
                 saveAndRender();
             }
         }
