@@ -315,12 +315,10 @@
 
         // Application State
         let appState = null;
-        // Tracking active tab (default is 'client-details')
-        let activeTabId = "client-details";
+        // Tracking active tab (default is 'all-clients')
+        let activeTabId = "all-clients";
         // Expanded task notes tracker
         let expandedNotes = {};
-        // Tracking active stats view ('current' or 'all')
-        let activeStatsView = "current";
 
         // Active project getter
         function activeProj() {
@@ -465,8 +463,13 @@
             const nav = document.getElementById("tabs-navigation");
             
             // Client details tab template
+            const dashboardActive = activeTabId === "all-clients";
             const clientActive = activeTabId === "client-details";
             let tabsHtml = `
+                <button onclick="setActiveTab('all-clients')" class="flex items-center gap-2 py-4 px-1 border-b-2 font-semibold text-sm shrink-0 transition ${dashboardActive ? 'border-brand-600 text-brand-600' : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'}">
+                    <i class="fa-solid fa-gauge-high text-base"></i>
+                    <span>לוח לקוחות מרוכז</span>
+                </button>
                 <button onclick="setActiveTab('client-details')" class="flex items-center gap-2 py-4 px-1 border-b-2 font-semibold text-sm shrink-0 transition ${clientActive ? 'border-brand-600 text-brand-600' : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'}">
                     <i class="fa-solid fa-user-tie text-base"></i>
                     <span>פרטי לקוח</span>
@@ -500,6 +503,90 @@
         function renderActiveTabContent() {
             const contentDiv = document.getElementById("tab-content");
             const active = activeProj();
+
+            if (activeTabId === "all-clients") {
+                // All Clients Dashboard View
+                let html = `
+                    <div class="space-y-6">
+                        <div class="flex justify-between items-center border-b border-slate-100 pb-4">
+                            <div>
+                                <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                                    <i class="fa-solid fa-gauge-high text-brand-600"></i>
+                                    <span>לוח מעקב לקוחות מרוכז</span>
+                                </h2>
+                                <p class="text-xs text-slate-500 mt-1">צפייה מרוכזת באחוזי ההתקדמות של כל הספרים בתהליך והחלפה מהירה בין לקוחות.</p>
+                            </div>
+                            <button onclick="addNewProject()" class="bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs px-4 py-2.5 rounded-lg inline-flex items-center gap-1.5 transition shadow-sm">
+                                <i class="fa-solid fa-plus-circle"></i>
+                                <span>הוספת לקוח חדש</span>
+                            </button>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                `;
+                
+                appState.projects.forEach(p => {
+                    let total = 0;
+                    let completed = 0;
+                    p.phases.forEach(ph => {
+                        total += ph.tasks.length;
+                        completed += ph.tasks.filter(t => t.completed).length;
+                    });
+                    const overallPercent = total > 0 ? Math.round((completed / total) * 100) : 0;
+                    const isCurrent = p.id === appState.activeProjectId;
+                    
+                    html += `
+                        <div onclick="selectProjectFromDashboard('${p.id}')" class="bg-white hover:bg-slate-50 border ${isCurrent ? 'border-brand-500 ring-1 ring-brand-500' : 'border-slate-200'} rounded-2xl p-5 cursor-pointer transition shadow-sm hover:shadow-md flex flex-col justify-between space-y-4">
+                            <div>
+                                <div class="flex justify-between items-start mb-2">
+                                    <div>
+                                        <span class="font-extrabold text-slate-800 text-base block">${escapeHtml(p.clientName)}</span>
+                                        <span class="text-xs text-slate-400 font-medium font-sans">טלפון: ${escapeHtml(p.clientPhone)} | מייל: ${escapeHtml(p.clientEmail)}</span>
+                                    </div>
+                                    <span class="text-sm font-extrabold text-brand-600 bg-brand-50 px-2.5 py-1 rounded-full border border-brand-100 font-sans">${overallPercent}% (${completed}/${total})</span>
+                                </div>
+                                <div class="w-full bg-slate-100 rounded-full h-3 overflow-hidden">
+                                    <div class="bg-brand-600 h-full transition-all duration-300" style="width: ${overallPercent}%"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-5 gap-2 text-[10px] text-center font-bold text-slate-500 pt-2 border-t border-slate-100">
+                    `;
+                    
+                    const phaseCodes = ["א", "ב", "ג", "ד", "ה"];
+                    p.phases.forEach((ph, idx) => {
+                        const phTotal = ph.tasks.length;
+                        const phCompleted = ph.tasks.filter(t => t.completed).length;
+                        const phPercent = phTotal > 0 ? Math.round((phCompleted / phTotal) * 100) : 0;
+                        
+                        let pillClass = "bg-slate-50 text-slate-400 border border-slate-200/50";
+                        if (phPercent === 100) {
+                            pillClass = "bg-emerald-50 text-emerald-700 border border-emerald-200/50";
+                        } else if (phPercent > 0) {
+                            pillClass = "bg-amber-50 text-amber-700 border border-amber-200/50";
+                        }
+                        
+                        html += `
+                                <div class="py-1.5 rounded ${pillClass}" title="${escapeHtml(ph.title)}: ${phPercent}%">
+                                    שלב ${phaseCodes[idx] || (idx+1)}
+                                    <span class="block text-[8px] opacity-80 mt-0.5">${phPercent}%</span>
+                                </div>
+                        `;
+                    });
+                    
+                    html += `
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                html += `
+                        </div>
+                    </div>
+                `;
+                contentDiv.innerHTML = html;
+                return;
+            }
 
             if (activeTabId === "client-details") {
                 // Client details tab view
@@ -552,16 +639,10 @@
                         <!-- Right Panel: Overall Statistics & Actions -->
                         <div class="md:col-span-6 flex flex-col justify-between space-y-6">
                             <div>
-                                <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-                                    <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
-                                        <i class="fa-solid fa-chart-pie text-emerald-600"></i>
-                                        <span>סטטוס התקדמות</span>
-                                    </h2>
-                                    <div class="flex bg-slate-100 p-0.5 rounded-lg text-xs font-semibold">
-                                        <button onclick="toggleStatsView('current')" id="btn-stats-current" class="px-3 py-1.5 rounded-md transition ${activeStatsView === 'current' ? 'shadow-sm bg-white text-slate-800' : 'text-slate-500 hover:text-slate-800'}">לקוח נוכחי</button>
-                                        <button onclick="toggleStatsView('all')" id="btn-stats-all" class="px-3 py-1.5 rounded-md transition ${activeStatsView === 'all' ? 'shadow-sm bg-white text-slate-800' : 'text-slate-500 hover:text-slate-800'}">כלל הלקוחות</button>
-                                    </div>
-                                </div>
+                                <h2 class="text-xl font-bold text-slate-900 border-b border-slate-100 pb-3 flex items-center gap-2">
+                                    <i class="fa-solid fa-chart-pie text-emerald-600"></i>
+                                    <span>סטטוס התקדמות מפורט</span>
+                                </h2>
                                 
                                 <div class="mt-4 space-y-3.5" id="detailed-stats-container">
                                     <!-- Populated below -->
@@ -588,79 +669,26 @@
                     </div>
                 `;
 
-                // Render Phase Stats in Client Details (Single Client vs All Clients)
+                // Render Phase Stats in Client Details
                 let statsHtml = "";
-                if (activeStatsView === "current") {
-                    if (active && active.phases) {
-                        active.phases.forEach(phase => {
-                            const total = phase.tasks.length;
-                            const completed = phase.tasks.filter(t => t.completed).length;
-                            const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
-                            
-                            statsHtml += `
-                                <div>
-                                    <div class="flex justify-between text-xs font-semibold mb-1">
-                                        <span class="text-slate-600">${escapeHtml(phase.title)}</span>
-                                        <span class="text-slate-800 font-bold">${percent}% (${completed}/${total})</span>
-                                    </div>
-                                    <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
-                                        <div class="bg-brand-500 h-full transition-all duration-300" style="width: ${percent}%"></div>
-                                    </div>
-                                </div>
-                            `;
-                        });
-                    }
-                } else {
-                    // All Clients View
-                    statsHtml = `<div class="space-y-4 max-h-[350px] overflow-y-auto pr-1">`;
-                    appState.projects.forEach(p => {
-                        let total = 0;
-                        let completed = 0;
-                        p.phases.forEach(ph => {
-                            total += ph.tasks.length;
-                            completed += ph.tasks.filter(t => t.completed).length;
-                        });
-                        const overallPercent = total > 0 ? Math.round((completed / total) * 100) : 0;
-                        const isCurrent = p.id === appState.activeProjectId;
+                if (active && active.phases) {
+                    active.phases.forEach(phase => {
+                        const total = phase.tasks.length;
+                        const completed = phase.tasks.filter(t => t.completed).length;
+                        const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
                         
                         statsHtml += `
-                            <div onclick="switchProject('${p.id}')" class="p-3 bg-white hover:bg-slate-50 border ${isCurrent ? 'border-brand-500 ring-1 ring-brand-500' : 'border-slate-200'} rounded-xl cursor-pointer transition shadow-sm">
-                                <div class="flex justify-between items-center mb-1.5">
-                                    <span class="font-bold text-sm text-slate-800">${escapeHtml(p.clientName)}</span>
-                                    <span class="text-xs font-bold text-brand-600">${overallPercent}% (${completed}/${total})</span>
+                            <div>
+                                <div class="flex justify-between text-xs font-semibold mb-1">
+                                    <span class="text-slate-600">${escapeHtml(phase.title)}</span>
+                                    <span class="text-slate-800 font-bold">${percent}% (${completed}/${total})</span>
                                 </div>
-                                <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden mb-2.5">
-                                    <div class="bg-brand-600 h-full transition-all duration-300" style="width: ${overallPercent}%"></div>
-                                </div>
-                                <div class="grid grid-cols-5 gap-1 text-[9px] text-center font-bold text-slate-500">
-                        `;
-                        
-                        const phaseCodes = ["א", "ב", "ג", "ד", "ה"];
-                        p.phases.forEach((ph, idx) => {
-                            const phTotal = ph.tasks.length;
-                            const phCompleted = ph.tasks.filter(t => t.completed).length;
-                            const phPercent = phTotal > 0 ? Math.round((phCompleted / phTotal) * 100) : 0;
-                            
-                            let pillClass = "bg-slate-100 text-slate-400 border border-slate-200/50";
-                            if (phPercent === 100) {
-                                pillClass = "bg-emerald-50 text-emerald-700 border border-emerald-200/50";
-                            } else if (phPercent > 0) {
-                                pillClass = "bg-amber-50 text-amber-700 border border-amber-200/50";
-                            }
-                            
-                            statsHtml += `
-                                    <div class="py-1 rounded ${pillClass}" title="${escapeHtml(ph.title)}: ${phPercent}%">
-                                        ש' ${phaseCodes[idx] || (idx+1)}: ${phPercent}%
-                                    </div>
-                            `;
-                        });
-                        
-                        statsHtml += `
+                                <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
+                                    <div class="bg-brand-500 h-full transition-all duration-300" style="width: ${percent}%"></div>
                                 </div>
                             </div>
                         `;
                     });
-                    statsHtml += `</div>`;
                 }
                 document.getElementById("detailed-stats-container").innerHTML = statsHtml || `<p class="text-slate-400 text-sm">אין שלבי עבודה מוגדרים.</p>`;
                 
@@ -1042,8 +1070,9 @@
         }
 
         // Project management helpers
-        function toggleStatsView(view) {
-            activeStatsView = view;
+        function selectProjectFromDashboard(id) {
+            appState.activeProjectId = id;
+            activeTabId = "client-details";
             saveAndRender();
         }
 
