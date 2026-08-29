@@ -269,7 +269,7 @@
                     id: "phase-3",
                     title: "שלב ג': סקיצה ראשונה",
                     tasks: [
-                        { id: "task-3-1", title: "עריכה ספרותית ומבנית לטיוטה המלאה", completed: false, dueDate: "", notes: "שיפור זרימת העלילה/התוכן, ארגון מחדש של פרקים במידת הצורך." },
+                        { id: "task-3-1", title: "הפעלת רועי לכתיבת 2500 מילים", completed: false, dueDate: "", notes: "" },
                         { id: "task-3-2", title: "עריכה לשונית וסגנונית", completed: false, dueDate: "", notes: "תיקון ניסוחים, זמנים, והאחדת סגנון הכתיבה." },
                         { id: "task-3-3", title: "הגהה סופית ותיקון שגיאות כתיב ופיסוק", completed: false, dueDate: "", notes: "" },
                         { id: "task-3-4", title: "אישור לקוח לטקסט הסופי לפני התחלת עימוד", completed: false, dueDate: "", notes: "חתימת הלקוח על הטקסט הסופי. לאחר שלב זה לא יוכנסו שינויי נוסח." }
@@ -325,7 +325,8 @@
                         const hasOldResearchTask = appState.phases.length > 1 && appState.phases[1].tasks.some(t => t.title === "ביצוע תחקיר עומק");
                         const hasOldGeminiTask = appState.phases.length > 1 && appState.phases[1].tasks.some(t => t.title === "ניתוח מסמכים ותמונות בג'מיני וקישור למקורות הרקע");
                         const hasOldPhase3Title = appState.phases.length > 2 && appState.phases[2].title === "שלב ג': עריכה והגהה";
-                        if (!hasOldTask1 && !hasOldPhase1Title && !hasOldPhase2 && !missingTask2_5 && !missingTask2_6 && !hasOldResearchTask && !hasOldGeminiTask && !hasOldPhase3Title) {
+                        const hasOldPhase3Task1 = appState.phases.length > 2 && appState.phases[2].tasks.some(t => t.title === "עריכה ספרותית ומבנית לטיוטה המלאה");
+                        if (!hasOldTask1 && !hasOldPhase1Title && !hasOldPhase2 && !missingTask2_5 && !missingTask2_6 && !hasOldResearchTask && !hasOldGeminiTask && !hasOldPhase3Title && !hasOldPhase3Task1) {
                             useDefault = false;
                         }
                     }
