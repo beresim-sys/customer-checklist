@@ -572,9 +572,11 @@
                         </div>
                     `;
                 } else {
-                    activePhase.tasks.forEach(task => {
+                    activePhase.tasks.forEach((task, index) => {
                         const isCompleted = task.completed;
                         const isPastDue = task.dueDate && new Date(task.dueDate) < new Date() && !isCompleted;
+                        const isFirst = index === 0;
+                        const isLast = index === activePhase.tasks.length - 1;
 
                         html += `
                             <div id="task-row-${task.id}" class="group py-4">
@@ -600,6 +602,20 @@
                                     <!-- Controls: Date and Actions -->
                                     <div class="flex items-center gap-2 shrink-0">
                                         
+                                        <!-- Reorder Buttons -->
+                                        <div class="flex items-center gap-0.5">
+                                            <button onclick="moveTask('${activePhase.id}', '${task.id}', 'up')" 
+                                                    title="העבר למעלה"
+                                                    ${isFirst ? 'disabled class="p-1 text-slate-200 cursor-not-allowed"' : 'class="p-1 text-slate-400 hover:text-brand-600 hover:bg-slate-100 rounded transition"'} >
+                                                <i class="fa-solid fa-chevron-up text-[10px]"></i>
+                                            </button>
+                                            <button onclick="moveTask('${activePhase.id}', '${task.id}', 'down')" 
+                                                    title="העבר למטה"
+                                                    ${isLast ? 'disabled class="p-1 text-slate-200 cursor-not-allowed"' : 'class="p-1 text-slate-400 hover:text-brand-600 hover:bg-slate-100 rounded transition"'} >
+                                                <i class="fa-solid fa-chevron-down text-[10px]"></i>
+                                            </button>
+                                        </div>
+
                                         <!-- Due Date Badge & Picker -->
                                         <div class="relative flex items-center">
                                             <input type="date" 
@@ -803,6 +819,24 @@
                 phase.tasks = phase.tasks.filter(t => t.id !== taskId);
                 saveAndRender();
             }
+        }
+
+        // Move task order (up or down)
+        function moveTask(phaseId, taskId, direction) {
+            const phase = appState.phases.find(p => p.id === phaseId);
+            if (!phase) return;
+            const index = phase.tasks.findIndex(t => t.id === taskId);
+            if (index === -1) return;
+            
+            const targetIndex = direction === 'up' ? index - 1 : index + 1;
+            if (targetIndex < 0 || targetIndex >= phase.tasks.length) return;
+            
+            // Swap tasks
+            const temp = phase.tasks[index];
+            phase.tasks[index] = phase.tasks[targetIndex];
+            phase.tasks[targetIndex] = temp;
+            
+            saveAndRender();
         }
 
         // Update phase title
