@@ -281,7 +281,9 @@
                         { id: "task-4-2", title: "הפעלת דניאל לשכתוב", completed: false, dueDate: "", notes: "" },
                         { id: "task-4-3", title: "הפעלת אסתר לאיתור סתירות", completed: false, dueDate: "", notes: "" },
                         { id: "task-4-4", title: "הפעלת יהודה להגהה", completed: false, dueDate: "", notes: "" },
-                        { id: "task-4-5", title: "הפעלת תפארת לכתיבת AI", completed: false, dueDate: "", notes: "" }
+                        { id: "task-4-5", title: "הפעלת תפארת לכתיבת AI", completed: false, dueDate: "", notes: "" },
+                        { id: "task-4-6", title: "הפעלת צוות ארט של בני", completed: false, dueDate: "", notes: "" },
+                        { id: "task-4-7", title: "בחירת כותר, כריכה ותקציר", completed: false, dueDate: "", notes: "" }
                     ]
                 },
                 {
@@ -328,7 +330,8 @@
                         const hasOldPhase3ExtraTasks = appState.phases.length > 2 && appState.phases[2].tasks.length > 2;
                         const hasOldPhase4Title = appState.phases.length > 3 && appState.phases[3].title === "שלב ד': עימוד ועיצוב גרפי";
                         const hasOldPhase4Task1 = appState.phases.length > 3 && appState.phases[3].tasks.some(t => t.title === "עיצוב סקיצות לכריכה (קדמית, גב ושידרה)");
-                        if (!hasOldTask1 && !hasOldPhase1Title && !hasOldPhase2 && !missingTask2_5 && !missingTask2_6 && !hasOldResearchTask && !hasOldGeminiTask && !hasOldPhase3Title && !hasOldPhase3Task1 && !hasOldPhase3Task2 && !hasOldPhase3ExtraTasks && !hasOldPhase4Title && !hasOldPhase4Task1) {
+                        const missingTask4_6 = appState.phases.length > 3 && !appState.phases[3].tasks.some(t => t.title === "הפעלת צוות ארט של בני");
+                        if (!hasOldTask1 && !hasOldPhase1Title && !hasOldPhase2 && !missingTask2_5 && !missingTask2_6 && !hasOldResearchTask && !hasOldGeminiTask && !hasOldPhase3Title && !hasOldPhase3Task1 && !hasOldPhase3Task2 && !hasOldPhase3ExtraTasks && !hasOldPhase4Title && !hasOldPhase4Task1 && !missingTask4_6) {
                             useDefault = false;
                         }
                     }
