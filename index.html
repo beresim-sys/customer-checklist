@@ -289,7 +289,7 @@
                                 { id: "task-4-6", title: "הפעלת צוות ארט של בני", completed: false, dueDate: "", notes: "" },
                                 { id: "task-4-7", title: "בחירת כותר, כריכה ותקציר", completed: false, dueDate: "", notes: "" },
                                 { id: "task-4-8", title: "הפעלת תמי לכתיבת מייל ללקוח", completed: false, dueDate: "", notes: "" },
-                                { id: "task-4-9", title: "שליחת סקיצה ראשונה ללקוח", completed: false, dueDate: "", notes: "" }
+                                { id: "task-4-9", title: "שליחת סקיצה ללקוח", completed: false, dueDate: "", notes: "" }
                             ]
                         },
                         {
@@ -367,59 +367,65 @@
         }
 
         function healAndRebuildState() {
-            if (!appState || !appState.projects || !Array.isArray(appState.projects)) return;
-            
-            const defaultProj = defaultState.projects[0];
-            
-            appState.projects.forEach(proj => {
-                if (!proj.phases || !Array.isArray(proj.phases)) {
-                    proj.phases = JSON.parse(JSON.stringify(defaultProj.phases));
-                    return;
-                }
+            try {
+                if (!appState || !appState.projects || !Array.isArray(appState.projects)) return;
                 
-                const rebuiltPhases = [];
+                const defaultProj = defaultState.projects[0];
                 
-                // 1. Rebuild the 5 default phases from the default template
-                defaultProj.phases.forEach(defPhase => {
-                    const freshPhase = JSON.parse(JSON.stringify(defPhase));
+                appState.projects.forEach(proj => {
+                    if (!proj.phases || !Array.isArray(proj.phases)) {
+                        proj.phases = JSON.parse(JSON.stringify(defaultProj.phases));
+                        return;
+                    }
                     
-                    // Look if the user has a phase with this ID or a similar title
-                    const userPhase = proj.phases.find(up => up.id === defPhase.id || up.title === defPhase.title) || 
-                                      proj.phases.find(up => up.title && up.title.includes(defPhase.title.split(':')[0])); // e.g. "שלב א'"
+                    const rebuiltPhases = [];
                     
-                    if (userPhase) {
-                        // Map user tasks to fresh tasks by title
-                        freshPhase.tasks.forEach(freshTask => {
-                            const userTask = userPhase.tasks.find(ut => ut.title === freshTask.title || ut.id === freshTask.id);
-                            if (userTask) {
-                                freshTask.completed = userTask.completed;
-                                freshTask.dueDate = userTask.dueDate || "";
-                                freshTask.notes = userTask.notes || "";
-                            }
-                        });
+                    // 1. Rebuild the 5 default phases from the default template
+                    defaultProj.phases.forEach(defPhase => {
+                        const freshPhase = JSON.parse(JSON.stringify(defPhase));
                         
-                        // Append any custom tasks the user added to this default phase
-                        userPhase.tasks.forEach(userTask => {
-                            const isDefaultTask = defPhase.tasks.some(dt => dt.title === userTask.title || dt.id === userTask.id);
-                            if (!isDefaultTask) {
-                                freshPhase.tasks.push(JSON.parse(JSON.stringify(userTask)));
-                            }
-                        });
-                    }
+                        // Look if the user has a phase with this ID or a similar title
+                        const userPhase = proj.phases.find(up => up && (up.id === defPhase.id || up.title === defPhase.title)) || 
+                                          proj.phases.find(up => up && up.title && typeof up.title === 'string' && up.title.includes(defPhase.title.split(':')[0])); // e.g. "שלב א'"
+                        
+                        if (userPhase && userPhase.tasks && Array.isArray(userPhase.tasks)) {
+                            // Map user tasks to fresh tasks by title
+                            freshPhase.tasks.forEach(freshTask => {
+                                const userTask = userPhase.tasks.find(ut => ut && (ut.title === freshTask.title || ut.id === freshTask.id));
+                                if (userTask) {
+                                    freshTask.completed = !!userTask.completed;
+                                    freshTask.dueDate = userTask.dueDate || "";
+                                    freshTask.notes = userTask.notes || "";
+                                }
+                            });
+                            
+                            // Append any custom tasks the user added to this default phase
+                            userPhase.tasks.forEach(userTask => {
+                                if (!userTask) return;
+                                const isDefaultTask = defPhase.tasks.some(dt => dt.title === userTask.title || dt.id === userTask.id);
+                                if (!isDefaultTask) {
+                                    freshPhase.tasks.push(JSON.parse(JSON.stringify(userTask)));
+                                }
+                            });
+                        }
+                        
+                        rebuiltPhases.push(freshPhase);
+                    });
                     
-                    rebuiltPhases.push(freshPhase);
+                    // 2. Append any custom phases the user created themselves
+                    proj.phases.forEach(userPhase => {
+                        if (!userPhase) return;
+                        const isDefaultPhase = defaultProj.phases.some(dp => dp.id === userPhase.id || dp.title === userPhase.title);
+                        if (!isDefaultPhase) {
+                            rebuiltPhases.push(JSON.parse(JSON.stringify(userPhase)));
+                        }
+                    });
+                    
+                    proj.phases = rebuiltPhases;
                 });
-                
-                // 2. Append any custom phases the user created themselves
-                proj.phases.forEach(userPhase => {
-                    const isDefaultPhase = defaultProj.phases.some(dp => dp.id === userPhase.id || dp.title === userPhase.title);
-                    if (!isDefaultPhase) {
-                        rebuiltPhases.push(JSON.parse(JSON.stringify(userPhase)));
-                    }
-                });
-                
-                proj.phases = rebuiltPhases;
-            });
+            } catch (err) {
+                console.error("Error healing state:", err);
+            }
         }
 
         // Load data from LocalStorage or initialize default
@@ -447,7 +453,7 @@
                         const hasOldPhase4Title = appState.phases.length > 3 && appState.phases[3].title === "שלב ד': עימוד ועיצוב גרפי";
                         const hasOldPhase4Task1 = appState.phases.length > 3 && appState.phases[3].tasks.some(t => t.title === "עיצוב סקיצות לכריכה (קדמית, גב ושידרה)");
                         const missingTask4_6 = appState.phases.length > 3 && !appState.phases[3].tasks.some(t => t.title === "הפעלת צוות ארט של בני");
-                        const missingTask4_9 = appState.phases.length > 3 && !appState.phases[3].tasks.some(t => t.title === "שליחת סקיצה ראשונה ללקוח");
+                        const missingTask4_9 = appState.phases.length > 3 && !appState.phases[3].tasks.some(t => t.title === "שליחת סקיצה ראשונה ללקוח" || t.title === "שליחת סקיצה ללקוח");
                         const hasOldPhase5Title = appState.phases.length > 4 && appState.phases[4].title === "שלב ה': הפקה, הדפסה והפצה";
                         const hasOldPhase5Task1 = appState.phases.length > 4 && appState.phases[4].tasks.some(t => t.title === "רישום הספר וקבלת מסת\"ב (ISBN) ודאנאקוד");
                         if (!hasOldTask1 && !hasOldPhase1Title && !hasOldPhase2 && !missingTask2_5 && !missingTask2_6 && !hasOldResearchTask && !hasOldGeminiTask && !hasOldPhase3Title && !hasOldPhase3Task1 && !hasOldPhase3Task2 && !hasOldPhase3TaskCount && !hasOldPhase4Title && !hasOldPhase4Task1 && !missingTask4_6 && !missingTask4_9 && !hasOldPhase5Title && !hasOldPhase5Task1) {
