@@ -293,12 +293,15 @@
                     id: "phase-5",
                     title: "שלב ה': הפקת מוצר סופי",
                     tasks: [
-                        { id: "task-5-1", title: "רישום הספר וקבלת מסת\"ב (ISBN) ודאנאקוד", completed: false, dueDate: "", notes: "הסדרת הרישום הרשמי מול בית הספרים הלאומי." },
-                        { id: "task-5-2", title: "סגירת קבצים מותאמים לדפוס (הצלבות צבעים ובלידים)", completed: false, dueDate: "", notes: "" },
-                        { id: "task-5-3", title: "הדפסת עותק ניסיון (העתק שמש) ואישורו על ידי הלקוח", completed: false, dueDate: "", notes: "בדיקת איכות פיזית של הצבעים והנייר לפני הדפסת המהדורה כולה." },
-                        { id: "task-5-4", title: "הדפסה וכריכה של המהדורה המלאה בבית הדפוס", completed: false, dueDate: "", notes: "" },
-                        { id: "task-5-5", title: "הפקת קובץ דיגיטלי (EPUB) להפצה מקוונת", completed: false, dueDate: "", notes: "" },
-                        { id: "task-5-6", title: "מסירה/משלוח של הספרים ללקוח וסגירת חשבון", completed: false, dueDate: "", notes: "" }
+                        { id: "task-5-1", title: "קבלת הערות הלקוח", completed: false, dueDate: "", notes: "" },
+                        { id: "task-5-2", title: "הטמעת הערות הלקוח בסיפור", completed: false, dueDate: "", notes: "" },
+                        { id: "task-5-3", title: "הפעלת תמי ליצירת מייל דרישת תשלום ללקוח", completed: false, dueDate: "", notes: "" },
+                        { id: "task-5-4", title: "שליחת מייל דרישת תשלום ללקוח, כולל חבילת ארט", completed: false, dueDate: "", notes: "" },
+                        { id: "task-5-5", title: "עיצוב קובץ להדפסה", completed: false, dueDate: "", notes: "" },
+                        { id: "task-5-6", title: "הדפסה וכריכה", completed: false, dueDate: "", notes: "" },
+                        { id: "task-5-7", title: "משלוח ספרים ללקוח", completed: false, dueDate: "", notes: "" },
+                        { id: "task-5-8", title: "הפעלת תמי ליצירת מייל סופי ללקוח", completed: false, dueDate: "", notes: "" },
+                        { id: "task-5-9", title: "שליחת מייל סופי", completed: false, dueDate: "", notes: "" }
                     ]
                 }
             ]
@@ -336,7 +339,8 @@
                         const missingTask4_6 = appState.phases.length > 3 && !appState.phases[3].tasks.some(t => t.title === "הפעלת צוות ארט של בני");
                         const missingTask4_9 = appState.phases.length > 3 && !appState.phases[3].tasks.some(t => t.title === "שליחת סקיצה ראשונה ללקוח");
                         const hasOldPhase5Title = appState.phases.length > 4 && appState.phases[4].title === "שלב ה': הפקה, הדפסה והפצה";
-                        if (!hasOldTask1 && !hasOldPhase1Title && !hasOldPhase2 && !missingTask2_5 && !missingTask2_6 && !hasOldResearchTask && !hasOldGeminiTask && !hasOldPhase3Title && !hasOldPhase3Task1 && !hasOldPhase3Task2 && !hasOldPhase3TaskCount && !hasOldPhase4Title && !hasOldPhase4Task1 && !missingTask4_6 && !missingTask4_9 && !hasOldPhase5Title) {
+                        const hasOldPhase5Task1 = appState.phases.length > 4 && appState.phases[4].tasks.some(t => t.title === "רישום הספר וקבלת מסת\"ב (ISBN) ודאנאקוד");
+                        if (!hasOldTask1 && !hasOldPhase1Title && !hasOldPhase2 && !missingTask2_5 && !missingTask2_6 && !hasOldResearchTask && !hasOldGeminiTask && !hasOldPhase3Title && !hasOldPhase3Task1 && !hasOldPhase3Task2 && !hasOldPhase3TaskCount && !hasOldPhase4Title && !hasOldPhase4Task1 && !missingTask4_6 && !missingTask4_9 && !hasOldPhase5Title && !hasOldPhase5Task1) {
                             useDefault = false;
                         }
                     }
