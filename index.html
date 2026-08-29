@@ -259,7 +259,7 @@
                     tasks: [
                         { id: "task-2-1", title: "הפעלת רנית", completed: false, dueDate: "", notes: "" },
                         { id: "task-2-2", title: "ביצוע תחקיר עומק והכנסת הדו\"ח למקורות הרקע", completed: false, dueDate: "", notes: "" },
-                        { id: "task-2-3", title: "ניתוח מסמכים ותמונות בג'מיני וקישור למקורות הרקע", completed: false, dueDate: "", notes: "" },
+                        { id: "task-2-3", title: "ניתוח מסמכים ותמונות בג'מיני", completed: false, dueDate: "", notes: "" },
                         { id: "task-2-4", title: "הפעלת תמי לניתוח שפת גוף וקול", completed: false, dueDate: "", notes: "" },
                         { id: "task-2-5", title: "הפעלת צוות העריכה הראשונית של טלי", completed: false, dueDate: "", notes: "" }
                     ]
@@ -321,7 +321,7 @@
                         const hasOldPhase2 = appState.phases.length > 1 && (appState.phases[1].title === "שלב ב': כתיבה ואיסוף חומרים" || appState.phases[1].title === "שלב ב': תחקיר");
                         const missingTask2_5 = appState.phases.length > 1 && !appState.phases[1].tasks.some(t => t.title === "הפעלת צוות העריכה הראשונית של טלי");
                         const hasOldResearchTask = appState.phases.length > 1 && appState.phases[1].tasks.some(t => t.title === "ביצוע תחקיר עומק");
-                        const hasOldGeminiTask = appState.phases.length > 1 && appState.phases[1].tasks.some(t => t.title === "ניתוח מסמכים ותמונות בג'מיני");
+                        const hasOldGeminiTask = appState.phases.length > 1 && appState.phases[1].tasks.some(t => t.title === "ניתוח מסמכים ותמונות בג'מיני וקישור למקורות הרקע");
                         if (!hasOldTask1 && !hasOldPhase1Title && !hasOldPhase2 && !missingTask2_5 && !hasOldResearchTask && !hasOldGeminiTask) {
                             useDefault = false;
                         }
