@@ -270,7 +270,7 @@
                     title: "שלב ג': סקיצה ראשונה",
                     tasks: [
                         { id: "task-3-1", title: "הפעלת רועי לכתיבת 2500 מילים", completed: false, dueDate: "", notes: "" },
-                        { id: "task-3-2", title: "עריכה לשונית וסגנונית", completed: false, dueDate: "", notes: "תיקון ניסוחים, זמנים, והאחדת סגנון הכתיבה." },
+                        { id: "task-3-2", title: "הפעלת אבי לסתירות בין המחקר לראיון הלקוח", completed: false, dueDate: "", notes: "" },
                         { id: "task-3-3", title: "הגהה סופית ותיקון שגיאות כתיב ופיסוק", completed: false, dueDate: "", notes: "" },
                         { id: "task-3-4", title: "אישור לקוח לטקסט הסופי לפני התחלת עימוד", completed: false, dueDate: "", notes: "חתימת הלקוח על הטקסט הסופי. לאחר שלב זה לא יוכנסו שינויי נוסח." }
                     ]
@@ -316,7 +316,7 @@
                 try {
                     appState = JSON.parse(stored);
                     if (appState.phases && Array.isArray(appState.phases) && appState.phases.length > 0) {
-                        // Check if it's the old default state (contains old task 1, old Phase 1 title, old Phase 2 titles, missing new Phase 2 tasks, or old research task titles)
+                        // Check if it's the old default state (contains old task 1, old Phase 1 title, old Phase 2 titles, missing new Phase 2 tasks, old research task titles, or old Phase 3 titles)
                         const hasOldTask1 = appState.phases[0].tasks.some(t => t.title === "פגישת אפיון והגדרת קונספט לספר");
                         const hasOldPhase1Title = appState.phases[0].title === "שלב א': תכנון, אפיון והתקשרות";
                         const hasOldPhase2 = appState.phases.length > 1 && (appState.phases[1].title === "שלב ב': כתיבה ואיסוף חומרים" || appState.phases[1].title === "שלב ב': תחקיר");
@@ -326,7 +326,8 @@
                         const hasOldGeminiTask = appState.phases.length > 1 && appState.phases[1].tasks.some(t => t.title === "ניתוח מסמכים ותמונות בג'מיני וקישור למקורות הרקע");
                         const hasOldPhase3Title = appState.phases.length > 2 && appState.phases[2].title === "שלב ג': עריכה והגהה";
                         const hasOldPhase3Task1 = appState.phases.length > 2 && appState.phases[2].tasks.some(t => t.title === "עריכה ספרותית ומבנית לטיוטה המלאה");
-                        if (!hasOldTask1 && !hasOldPhase1Title && !hasOldPhase2 && !missingTask2_5 && !missingTask2_6 && !hasOldResearchTask && !hasOldGeminiTask && !hasOldPhase3Title && !hasOldPhase3Task1) {
+                        const hasOldPhase3Task2 = appState.phases.length > 2 && appState.phases[2].tasks.some(t => t.title === "עריכה לשונית וסגנונית");
+                        if (!hasOldTask1 && !hasOldPhase1Title && !hasOldPhase2 && !missingTask2_5 && !missingTask2_6 && !hasOldResearchTask && !hasOldGeminiTask && !hasOldPhase3Title && !hasOldPhase3Task1 && !hasOldPhase3Task2) {
                             useDefault = false;
                         }
                     }
