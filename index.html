@@ -239,72 +239,78 @@
     <script>
         // Default initial application state
         const defaultState = {
-            clientName: "רשימת תיוג ללקוח",
-            clientPhone: "050-0000000",
-            clientEmail: "client@example.com",
-            phases: [
+            projects: [
                 {
-                    id: "phase-1",
-                    title: "שלב א': התקשרות עם לקוח",
-                    tasks: [
-                        { id: "task-1-1", title: "ראיון זום עם הלקוח", completed: false, dueDate: "", notes: "פגישת אפיון והגדרת קונספט לספר." },
-                        { id: "task-1-2", title: "קבלת מקדמה", completed: false, dueDate: "", notes: "הסדרת תשלום מקדמה ותיאום הסכם עבודה." },
-                        { id: "task-1-3", title: "פתיחת מחברת לקוח", completed: false, dueDate: "", notes: "הקמת תיקיה ללקוח וריכוז פרטים ראשוניים." },
-                        { id: "task-1-4", title: "קבלת חומרי רקע נוספים מהלקוח", completed: false, dueDate: "", notes: "איסוף חומרים, תמונות וקבצי טקסט ראשוניים מהלקוח." }
-                    ]
-                },
-                {
-                    id: "phase-2",
-                    title: "שלב ב': הכנת מקורות רקע",
-                    tasks: [
-                        { id: "task-2-1", title: "הפעלת רנית", completed: false, dueDate: "", notes: "" },
-                        { id: "task-2-2", title: "ביצוע תחקיר עומק והכנסת הדו\"ח למקורות הרקע", completed: false, dueDate: "", notes: "" },
-                        { id: "task-2-3", title: "ניתוח מסמכים ותמונות בג'מיני", completed: false, dueDate: "", notes: "" },
-                        { id: "task-2-4", title: "הפעלת תמי לניתוח שפת גוף וקול", completed: false, dueDate: "", notes: "" },
-                        { id: "task-2-5", title: "הפעלת צוות העריכה הראשונית של טלי", completed: false, dueDate: "", notes: "" },
-                        { id: "task-2-6", title: "הפעלת סקיל יצירת סיפורי רקע בג'מיני", completed: false, dueDate: "", notes: "" }
-                    ]
-                },
-                {
-                    id: "phase-3",
-                    title: "שלב ג': סקיצה ראשונה",
-                    tasks: [
-                        { id: "task-3-1", title: "בחירת תבנית כתיבה", completed: false, dueDate: "", notes: "" },
-                        { id: "task-3-2", title: "הפעלת רועי לכתיבת 2500 מילים", completed: false, dueDate: "", notes: "" },
-                        { id: "task-3-3", title: "הפעלת אבי לסתירות בין המחקר לראיון הלקוח", completed: false, dueDate: "", notes: "" }
-                    ]
-                },
-                {
-                    id: "phase-4",
-                    title: "שלב ד': סקיצה ללקוח",
-                    tasks: [
-                        { id: "task-4-1", title: "הפעלת רועי לכתיבת 6000 מילים", completed: false, dueDate: "", notes: "" },
-                        { id: "task-4-2", title: "הפעלת דניאל לשכתוב", completed: false, dueDate: "", notes: "" },
-                        { id: "task-4-3", title: "הפעלת אסתר לאיתור סתירות", completed: false, dueDate: "", notes: "" },
-                        { id: "task-4-4", title: "הפעלת יהודה להגהה", completed: false, dueDate: "", notes: "" },
-                        { id: "task-4-5", title: "הפעלת תפארת לכתיבת AI", completed: false, dueDate: "", notes: "" },
-                        { id: "task-4-6", title: "הפעלת צוות ארט של בני", completed: false, dueDate: "", notes: "" },
-                        { id: "task-4-7", title: "בחירת כותר, כריכה ותקציר", completed: false, dueDate: "", notes: "" },
-                        { id: "task-4-8", title: "הפעלת תמי לכתיבת מייל ללקוח", completed: false, dueDate: "", notes: "" },
-                        { id: "task-4-9", title: "שליחת סקיצה ראשונה ללקוח", completed: false, dueDate: "", notes: "" }
-                    ]
-                },
-                {
-                    id: "phase-5",
-                    title: "שלב ה': הפקת מוצר סופי",
-                    tasks: [
-                        { id: "task-5-1", title: "קבלת הערות הלקוח", completed: false, dueDate: "", notes: "" },
-                        { id: "task-5-2", title: "הטמעת הערות הלקוח בסיפור", completed: false, dueDate: "", notes: "" },
-                        { id: "task-5-3", title: "הפעלת תמי ליצירת מייל דרישת תשלום ללקוח", completed: false, dueDate: "", notes: "" },
-                        { id: "task-5-4", title: "שליחת מייל דרישת תשלום ללקוח, כולל חבילת ארט", completed: false, dueDate: "", notes: "" },
-                        { id: "task-5-5", title: "עיצוב קובץ להדפסה", completed: false, dueDate: "", notes: "" },
-                        { id: "task-5-6", title: "הדפסה וכריכה", completed: false, dueDate: "", notes: "" },
-                        { id: "task-5-7", title: "משלוח ספרים ללקוח", completed: false, dueDate: "", notes: "" },
-                        { id: "task-5-8", title: "הפעלת תמי ליצירת מייל סופי ללקוח", completed: false, dueDate: "", notes: "" },
-                        { id: "task-5-9", title: "שליחת מייל סופי", completed: false, dueDate: "", notes: "" }
+                    id: "proj-default",
+                    clientName: "רשימת תיוג ללקוח",
+                    clientPhone: "050-0000000",
+                    clientEmail: "client@example.com",
+                    phases: [
+                        {
+                            id: "phase-1",
+                            title: "שלב א': התקשרות עם לקוח",
+                            tasks: [
+                                { id: "task-1-1", title: "ראיון זום עם הלקוח", completed: false, dueDate: "", notes: "פגישת אפיון והגדרת קונספט לספר." },
+                                { id: "task-1-2", title: "קבלת מקדמה", completed: false, dueDate: "", notes: "הסדרת תשלום מקדמה ותיאום הסכם עבודה." },
+                                { id: "task-1-3", title: "פתיחת מחברת לקוח", completed: false, dueDate: "", notes: "הקמת תיקיה ללקוח וריכוז פרטים ראשוניים." },
+                                { id: "task-1-4", title: "קבלת חומרי רקע נוספים מהלקוח", completed: false, dueDate: "", notes: "איסוף חומרים, תמונות וקבצי טקסט ראשוניים מהלקוח." }
+                            ]
+                        },
+                        {
+                            id: "phase-2",
+                            title: "שלב ב': הכנת מקורות רקע",
+                            tasks: [
+                                { id: "task-2-1", title: "הפעלת רנית", completed: false, dueDate: "", notes: "" },
+                                { id: "task-2-2", title: "ביצוע תחקיר עומק והכנסת הדו\"ח למקורות הרקע", completed: false, dueDate: "", notes: "" },
+                                { id: "task-2-3", title: "ניתוח מסמכים ותמונות בג'מיני", completed: false, dueDate: "", notes: "" },
+                                { id: "task-2-4", title: "הפעלת תמי לניתוח שפת גוף וקול", completed: false, dueDate: "", notes: "" },
+                                { id: "task-2-5", title: "הפעלת צוות העריכה הראשונית של טלי", completed: false, dueDate: "", notes: "" },
+                                { id: "task-2-6", title: "הפעלת סקיל יצירת סיפורי רקע בג'מיני", completed: false, dueDate: "", notes: "" }
+                            ]
+                        },
+                        {
+                            id: "phase-3",
+                            title: "שלב ג': סקיצה ראשונה",
+                            tasks: [
+                                { id: "task-3-1", title: "בחירת תבנית כתיבה", completed: false, dueDate: "", notes: "" },
+                                { id: "task-3-2", title: "הפעלת רועי לכתיבת 2500 מילים", completed: false, dueDate: "", notes: "" },
+                                { id: "task-3-3", title: "הפעלת אבי לסתירות בין המחקר לראיון הלקוח", completed: false, dueDate: "", notes: "" }
+                            ]
+                        },
+                        {
+                            id: "phase-4",
+                            title: "שלב ד': סקיצה ללקוח",
+                            tasks: [
+                                { id: "task-4-1", title: "הפעלת רועי לכתיבת 6000 מילים", completed: false, dueDate: "", notes: "" },
+                                { id: "task-4-2", title: "הפעלת דניאל לשכתוב", completed: false, dueDate: "", notes: "" },
+                                { id: "task-4-3", title: "הפעלת אסתר לאיתור סתירות", completed: false, dueDate: "", notes: "" },
+                                { id: "task-4-4", title: "הפעלת יהודה להגהה", completed: false, dueDate: "", notes: "" },
+                                { id: "task-4-5", title: "הפעלת תפארת לכתיבת AI", completed: false, dueDate: "", notes: "" },
+                                { id: "task-4-6", title: "הפעלת צוות ארט של בני", completed: false, dueDate: "", notes: "" },
+                                { id: "task-4-7", title: "בחירת כותר, כריכה ותקציר", completed: false, dueDate: "", notes: "" },
+                                { id: "task-4-8", title: "הפעלת תמי לכתיבת מייל ללקוח", completed: false, dueDate: "", notes: "" },
+                                { id: "task-4-9", title: "שליחת סקיצה ראשונה ללקוח", completed: false, dueDate: "", notes: "" }
+                            ]
+                        },
+                        {
+                            id: "phase-5",
+                            title: "שלב ה': הפקת מוצר סופי",
+                            tasks: [
+                                { id: "task-5-1", title: "קבלת הערות הלקוח", completed: false, dueDate: "", notes: "" },
+                                { id: "task-5-2", title: "הטמעת הערות הלקוח בסיפור", completed: false, dueDate: "", notes: "" },
+                                { id: "task-5-3", title: "הפעלת תמי ליצירת מייל דרישת תשלום ללקוח", completed: false, dueDate: "", notes: "" },
+                                { id: "task-5-4", title: "שליחת מייל דרישת תשלום ללקוח, כולל חבילת ארט", completed: false, dueDate: "", notes: "" },
+                                { id: "task-5-5", title: "עיצוב קובץ להדפסה", completed: false, dueDate: "", notes: "" },
+                                { id: "task-5-6", title: "הדפסה וכריכה", completed: false, dueDate: "", notes: "" },
+                                { id: "task-5-7", title: "משלוח ספרים ללקוח", completed: false, dueDate: "", notes: "" },
+                                { id: "task-5-8", title: "הפעלת תמי ליצירת מייל סופי ללקוח", completed: false, dueDate: "", notes: "" },
+                                { id: "task-5-9", title: "שליחת מייל סופי", completed: false, dueDate: "", notes: "" }
+                            ]
+                        }
                     ]
                 }
-            ]
+            ],
+            activeProjectId: "proj-default"
         };
 
         // Application State
@@ -314,6 +320,30 @@
         // Expanded task notes tracker
         let expandedNotes = {};
 
+        // Active project getter
+        function activeProj() {
+            if (!appState) return null;
+            if (!appState.projects || !Array.isArray(appState.projects)) {
+                const oldPhases = appState.phases || [];
+                const oldName = appState.clientName || "רשימת תיוג ללקוח";
+                const oldPhone = appState.clientPhone || "050-0000000";
+                const oldEmail = appState.clientEmail || "client@example.com";
+                appState = {
+                    projects: [
+                        {
+                            id: "proj-default",
+                            clientName: oldName,
+                            clientPhone: oldPhone,
+                            clientEmail: oldEmail,
+                            phases: oldPhases
+                        }
+                    ],
+                    activeProjectId: "proj-default"
+                };
+            }
+            return appState.projects.find(p => p.id === appState.activeProjectId) || appState.projects[0];
+        }
+
         // Load data from LocalStorage or initialize default
         function initApp() {
             const stored = localStorage.getItem("customerBookChecklist");
@@ -321,8 +351,10 @@
             if (stored) {
                 try {
                     appState = JSON.parse(stored);
-                    if (appState.phases && Array.isArray(appState.phases) && appState.phases.length > 0) {
-                        // Check if it's the old default state (contains old task 1, old Phase 1 title, old Phase 2 titles, missing new Phase 2 tasks, old research task titles, or old Phase 3 titles)
+                    if (appState.projects && Array.isArray(appState.projects) && appState.projects.length > 0) {
+                        useDefault = false;
+                    } else if (appState.phases && Array.isArray(appState.phases) && appState.phases.length > 0) {
+                        // Check if it's the old default state
                         const hasOldTask1 = appState.phases[0].tasks.some(t => t.title === "פגישת אפיון והגדרת קונספט לספר");
                         const hasOldPhase1Title = appState.phases[0].title === "שלב א': תכנון, אפיון והתקשרות";
                         const hasOldPhase2 = appState.phases.length > 1 && (appState.phases[1].title === "שלב ב': כתיבה ואיסוף חומרים" || appState.phases[1].title === "שלב ב': תחקיר");
@@ -350,8 +382,27 @@
             }
             if (useDefault) {
                 appState = JSON.parse(JSON.stringify(defaultState));
-            } else if (appState.clientName === "חיי שרה") {
-                appState.clientName = "רשימת תיוג ללקוח";
+            } else {
+                // Migrate single project to projects structure
+                if (!appState.projects || !Array.isArray(appState.projects)) {
+                    const oldPhases = appState.phases || [];
+                    const oldName = appState.clientName || "רשימת תיוג ללקוח";
+                    const oldPhone = appState.clientPhone || "050-0000000";
+                    const oldEmail = appState.clientEmail || "client@example.com";
+                    appState = {
+                        projects: [
+                            {
+                                id: "proj-" + Date.now(),
+                                clientName: oldName,
+                                clientPhone: oldPhone,
+                                clientEmail: oldEmail,
+                                phases: oldPhases
+                            }
+                        ],
+                        activeProjectId: null
+                    };
+                    appState.activeProjectId = appState.projects[0].id;
+                }
             }
 
             // Load active tab from localStorage if exists
@@ -369,7 +420,8 @@
             localStorage.setItem("activeTabId", activeTabId);
 
             // Sync Header Project Name
-            document.getElementById("header-project-title").innerText = appState.clientName || "פרויקט ללא שם";
+            const active = activeProj();
+            document.getElementById("header-project-title").innerText = active ? (active.clientName || "פרויקט ללא שם") : "רשימת תיוג ללקוח";
             
             updateProgressPercentage();
             renderTabs();
@@ -382,10 +434,13 @@
             let total = 0;
             let completed = 0;
 
-            appState.phases.forEach(p => {
-                total += p.tasks.length;
-                completed += p.tasks.filter(t => t.completed).length;
-            });
+            const active = activeProj();
+            if (active && active.phases) {
+                active.phases.forEach(p => {
+                    total += p.tasks.length;
+                    completed += p.tasks.filter(t => t.completed).length;
+                });
+            }
 
             const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
             
@@ -417,21 +472,24 @@
             `;
 
             // Loop phases and build tabs
-            appState.phases.forEach(phase => {
-                const isActive = activeTabId === phase.id;
-                const total = phase.tasks.length;
-                const completed = phase.tasks.filter(t => t.completed).length;
-                const isAllCompleted = total > 0 && total === completed;
+            const active = activeProj();
+            if (active && active.phases) {
+                active.phases.forEach(phase => {
+                    const isActive = activeTabId === phase.id;
+                    const total = phase.tasks.length;
+                    const completed = phase.tasks.filter(t => t.completed).length;
+                    const isAllCompleted = total > 0 && total === completed;
 
-                tabsHtml += `
-                    <button onclick="setActiveTab('${phase.id}')" class="flex items-center gap-2 py-4 px-1 border-b-2 font-semibold text-sm shrink-0 transition ${isActive ? 'border-brand-600 text-brand-600' : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'}">
-                        <span>${escapeHtml(phase.title)}</span>
-                        <span class="text-xs px-1.5 py-0.5 rounded-full ${isAllCompleted ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-600'}">
-                            ${completed}/${total}
-                        </span>
-                    </button>
-                `;
-            });
+                    tabsHtml += `
+                        <button onclick="setActiveTab('${phase.id}')" class="flex items-center gap-2 py-4 px-1 border-b-2 font-semibold text-sm shrink-0 transition ${isActive ? 'border-brand-600 text-brand-600' : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'}">
+                            <span>${escapeHtml(phase.title)}</span>
+                            <span class="text-xs px-1.5 py-0.5 rounded-full ${isAllCompleted ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-600'}">
+                                ${completed}/${total}
+                            </span>
+                        </button>
+                    `;
+                });
+            }
 
             nav.innerHTML = tabsHtml;
         }
@@ -439,6 +497,7 @@
         // Render Active Tab Content Area
         function renderActiveTabContent() {
             const contentDiv = document.getElementById("tab-content");
+            const active = activeProj();
 
             if (activeTabId === "client-details") {
                 // Client details tab view
@@ -453,18 +512,37 @@
                             
                             <div class="space-y-4">
                                 <div>
+                                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">בחר לקוח פעיל / פרויקט</label>
+                                    <div class="flex gap-2">
+                                        <select onchange="switchProject(this.value)" class="w-full bg-slate-50 hover:bg-slate-100/50 border border-slate-200 focus:border-brand-500 rounded-xl px-4 py-3 text-sm text-slate-700 outline-none transition font-semibold">
+                                            ${appState.projects.map(p => `
+                                                <option value="${p.id}" ${p.id === appState.activeProjectId ? 'selected' : ''}>
+                                                    ${escapeHtml(p.clientName)}
+                                                </option>
+                                            `).join('')}
+                                        </select>
+                                        <button onclick="addNewProject()" title="הוסף לקוח חדש" class="bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-xl px-4 flex items-center justify-center transition shadow-sm shrink-0">
+                                            <i class="fa-solid fa-plus"></i>
+                                        </button>
+                                        <button onclick="deleteCurrentProject()" title="מחק לקוח נוכחי" class="bg-red-50 hover:bg-red-100 text-red-600 border border-red-100 font-semibold rounded-xl px-4 flex items-center justify-center transition shrink-0" ${appState.projects.length <= 1 ? 'disabled style="opacity: 0.5; cursor: not-allowed;"' : ''}>
+                                            <i class="fa-solid fa-trash-can"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div>
                                     <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">שם הלקוח / הפרויקט</label>
-                                    <input type="text" id="client-name-input" value="${escapeHtml(appState.clientName)}" onchange="updateClientField('name', this.value)" class="w-full bg-slate-50 hover:bg-slate-100/50 focus:bg-white border border-slate-200 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 rounded-xl px-4 py-3 text-base font-semibold text-slate-800 outline-none transition font-sans" placeholder="למשל: חיי שרה">
+                                    <input type="text" id="client-name-input" value="${escapeHtml(active.clientName)}" onchange="updateClientField('name', this.value)" class="w-full bg-slate-50 hover:bg-slate-100/50 focus:bg-white border border-slate-200 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 rounded-xl px-4 py-3 text-base font-semibold text-slate-800 outline-none transition font-sans" placeholder="למשל: רשימת תיוג ללקוח">
                                 </div>
 
                                 <div>
                                     <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">מספר טלפון ליצירת קשר</label>
-                                    <input type="tel" id="client-phone-input" value="${escapeHtml(appState.clientPhone)}" onchange="updateClientField('phone', this.value)" class="w-full bg-slate-50 hover:bg-slate-100/50 focus:bg-white border border-slate-200 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 rounded-xl px-4 py-3 text-sm text-slate-700 outline-none transition" placeholder="למשל: 050-1234567">
+                                    <input type="tel" id="client-phone-input" value="${escapeHtml(active.clientPhone)}" onchange="updateClientField('phone', this.value)" class="w-full bg-slate-50 hover:bg-slate-100/50 focus:bg-white border border-slate-200 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 rounded-xl px-4 py-3 text-sm text-slate-700 outline-none transition" placeholder="למשל: 050-1234567">
                                 </div>
 
                                 <div>
                                     <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">כתובת אימייל</label>
-                                    <input type="email" id="client-email-input" value="${escapeHtml(appState.clientEmail)}" onchange="updateClientField('email', this.value)" class="w-full bg-slate-50 hover:bg-slate-100/50 focus:bg-white border border-slate-200 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 rounded-xl px-4 py-3 text-sm text-slate-700 outline-none transition text-left" style="direction: ltr;" placeholder="example@mail.com">
+                                    <input type="email" id="client-email-input" value="${escapeHtml(active.clientEmail)}" onchange="updateClientField('email', this.value)" class="w-full bg-slate-50 hover:bg-slate-100/50 focus:bg-white border border-slate-200 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 rounded-xl px-4 py-3 text-sm text-slate-700 outline-none transition text-left" style="direction: ltr;" placeholder="example@mail.com">
                                 </div>
                             </div>
                         </div>
@@ -504,28 +582,30 @@
 
                 // Render Phase Stats in Client Details
                 let statsHtml = "";
-                appState.phases.forEach(phase => {
-                    const total = phase.tasks.length;
-                    const completed = phase.tasks.filter(t => t.completed).length;
-                    const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
-                    
-                    statsHtml += `
-                        <div>
-                            <div class="flex justify-between text-xs font-semibold mb-1">
-                                <span class="text-slate-600">${escapeHtml(phase.title)}</span>
-                                <span class="text-slate-800 font-bold">${percent}% (${completed}/${total})</span>
+                if (active && active.phases) {
+                    active.phases.forEach(phase => {
+                        const total = phase.tasks.length;
+                        const completed = phase.tasks.filter(t => t.completed).length;
+                        const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
+                        
+                        statsHtml += `
+                            <div>
+                                <div class="flex justify-between text-xs font-semibold mb-1">
+                                    <span class="text-slate-600">${escapeHtml(phase.title)}</span>
+                                    <span class="text-slate-800 font-bold">${percent}% (${completed}/${total})</span>
+                                </div>
+                                <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
+                                    <div class="bg-brand-500 h-full transition-all duration-300" style="width: ${percent}%"></div>
+                                </div>
                             </div>
-                            <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
-                                <div class="bg-brand-500 h-full transition-all duration-300" style="width: ${percent}%"></div>
-                            </div>
-                        </div>
-                    `;
-                });
+                        `;
+                    });
+                }
                 document.getElementById("detailed-stats-container").innerHTML = statsHtml || `<p class="text-slate-400 text-sm">אין שלבי עבודה מוגדרים.</p>`;
                 
             } else {
                 // Phase tasks view
-                const activePhase = appState.phases.find(p => p.id === activeTabId);
+                const activePhase = active ? active.phases.find(p => p.id === activeTabId) : null;
                 if (!activePhase) {
                     // Falls back to details if phase not found
                     activeTabId = "client-details";
@@ -658,16 +738,19 @@
 
         // Generate Print-Optimized sequential layout for PDF Export
         function renderPrintView() {
+            const active = activeProj();
+            if (!active) return;
+
             // Update static info fields
-            document.getElementById("print-project-header").innerText = appState.clientName || "פרויקט ללא שם";
-            document.getElementById("print-client-name").innerText = appState.clientName || "-";
-            document.getElementById("print-client-phone").innerText = appState.clientPhone || "-";
-            document.getElementById("print-client-email").innerText = appState.clientEmail || "-";
+            document.getElementById("print-project-header").innerText = active.clientName || "פרויקט ללא שם";
+            document.getElementById("print-client-name").innerText = active.clientName || "-";
+            document.getElementById("print-client-phone").innerText = active.clientPhone || "-";
+            document.getElementById("print-client-email").innerText = active.clientEmail || "-";
 
             const printPhasesDiv = document.getElementById("print-phases-list");
             
             let html = "";
-            appState.phases.forEach((phase) => {
+            active.phases.forEach((phase) => {
                 const total = phase.tasks.length;
                 const completed = phase.tasks.filter(t => t.completed).length;
                 
@@ -727,19 +810,23 @@
 
         // Update client info fields
         function updateClientField(field, value) {
+            const active = activeProj();
+            if (!active) return;
             if (field === 'name') {
-                appState.clientName = value.trim() || "רשימת תיוג ללקוח";
-                document.getElementById("header-project-title").innerText = appState.clientName;
+                active.clientName = value.trim() || "רשימת תיוג ללקוח";
+                document.getElementById("header-project-title").innerText = active.clientName;
             }
-            if (field === 'phone') appState.clientPhone = value.trim();
-            if (field === 'email') appState.clientEmail = value.trim();
+            if (field === 'phone') active.clientPhone = value.trim();
+            if (field === 'email') active.clientEmail = value.trim();
             
             saveAndRender();
         }
 
         // Toggle task completed checkbox
         function toggleTask(phaseId, taskId) {
-            const phase = appState.phases.find(p => p.id === phaseId);
+            const active = activeProj();
+            if (!active) return;
+            const phase = active.phases.find(p => p.id === phaseId);
             if (phase) {
                 const task = phase.tasks.find(t => t.id === taskId);
                 if (task) {
@@ -751,7 +838,9 @@
 
         // Update task title inline
         function updateTaskTitle(phaseId, taskId, newTitle) {
-            const phase = appState.phases.find(p => p.id === phaseId);
+            const active = activeProj();
+            if (!active) return;
+            const phase = active.phases.find(p => p.id === phaseId);
             if (phase) {
                 const task = phase.tasks.find(t => t.id === taskId);
                 if (task) {
@@ -763,7 +852,9 @@
 
         // Update task due date
         function updateTaskDueDate(phaseId, taskId, dateString) {
-            const phase = appState.phases.find(p => p.id === phaseId);
+            const active = activeProj();
+            if (!active) return;
+            const phase = active.phases.find(p => p.id === phaseId);
             if (phase) {
                 const task = phase.tasks.find(t => t.id === taskId);
                 if (task) {
@@ -775,7 +866,9 @@
 
         // Update task notes textarea
         function updateTaskNotes(phaseId, taskId, notes) {
-            const phase = appState.phases.find(p => p.id === phaseId);
+            const active = activeProj();
+            if (!active) return;
+            const phase = active.phases.find(p => p.id === phaseId);
             if (phase) {
                 const task = phase.tasks.find(t => t.id === taskId);
                 if (task) {
@@ -787,7 +880,9 @@
 
         // Add a brand new task inside a phase
         function addNewTask(phaseId) {
-            const phase = appState.phases.find(p => p.id === phaseId);
+            const active = activeProj();
+            if (!active) return;
+            const phase = active.phases.find(p => p.id === phaseId);
             if (phase) {
                 const newId = "task-" + Date.now() + "-" + Math.floor(Math.random() * 1000);
                 phase.tasks.push({
@@ -816,7 +911,9 @@
 
         // Delete a task
         function deleteTask(phaseId, taskId) {
-            const phase = appState.phases.find(p => p.id === phaseId);
+            const active = activeProj();
+            if (!active) return;
+            const phase = active.phases.find(p => p.id === phaseId);
             if (phase) {
                 phase.tasks = phase.tasks.filter(t => t.id !== taskId);
                 saveAndRender();
@@ -825,7 +922,9 @@
 
         // Move task order (up or down)
         function moveTask(phaseId, taskId, direction) {
-            const phase = appState.phases.find(p => p.id === phaseId);
+            const active = activeProj();
+            if (!active) return;
+            const phase = active.phases.find(p => p.id === phaseId);
             if (!phase) return;
             const index = phase.tasks.findIndex(t => t.id === taskId);
             if (index === -1) return;
@@ -843,7 +942,9 @@
 
         // Update phase title
         function updatePhaseTitle(phaseId, newTitle) {
-            const phase = appState.phases.find(p => p.id === phaseId);
+            const active = activeProj();
+            if (!active) return;
+            const phase = active.phases.find(p => p.id === phaseId);
             if (phase) {
                 phase.title = newTitle.trim() || "שלב ללא שם";
                 saveAndRender();
@@ -852,8 +953,10 @@
 
         // Delete a complete phase
         function deletePhase(phaseId) {
+            const active = activeProj();
+            if (!active) return;
             if (confirm("האם אתה בטוח שברצונך למחוק את כל שלב העבודה הזה יחד עם כל תתי-השלבים (המשימות) שבתוכו?")) {
-                appState.phases = appState.phases.filter(p => p.id !== phaseId);
+                active.phases = active.phases.filter(p => p.id !== phaseId);
                 // Fallback tab
                 activeTabId = "client-details";
                 saveAndRender();
@@ -862,15 +965,64 @@
 
         // Add custom phase to the bottom
         function promptAddNewPhase() {
+            const active = activeProj();
+            if (!active) return;
             const title = prompt("הזן שם עבור שלב העבודה החדש:");
             if (title && title.trim()) {
                 const phaseId = "phase-" + Date.now();
-                appState.phases.push({
+                active.phases.push({
                     id: phaseId,
                     title: title.trim(),
                     tasks: []
                 });
                 activeTabId = phaseId;
+                saveAndRender();
+            }
+        }
+
+        // Project management helpers
+        function switchProject(id) {
+            appState.activeProjectId = id;
+            saveAndRender();
+        }
+
+        function addNewProject() {
+            const name = prompt("הכנס שם ללקוח / פרויקט החדש:") || "";
+            const trimmed = name.trim();
+            if (!trimmed) return;
+            
+            // Duplicate default project phases template
+            const defaultProjTemplate = defaultState.projects[0];
+            const freshPhaseTemplate = JSON.parse(JSON.stringify(defaultProjTemplate.phases));
+            
+            // Reset task status for fresh copy
+            freshPhaseTemplate.forEach(phase => {
+                phase.tasks.forEach(task => {
+                    task.completed = false;
+                    task.dueDate = "";
+                });
+            });
+            
+            const newProj = {
+                id: "proj-" + Date.now(),
+                clientName: trimmed,
+                clientPhone: "050-0000000",
+                clientEmail: "client@example.com",
+                phases: freshPhaseTemplate
+            };
+            
+            appState.projects.push(newProj);
+            appState.activeProjectId = newProj.id;
+            saveAndRender();
+        }
+
+        function deleteCurrentProject() {
+            if (appState.projects.length <= 1) return;
+            
+            const active = activeProj();
+            if (confirm(`האם אתה בטוח שברצונך למחוק את הלקוח "${active.clientName}" ואת כל רשימת התיוג שלו?`)) {
+                appState.projects = appState.projects.filter(p => p.id !== appState.activeProjectId);
+                appState.activeProjectId = appState.projects[0].id;
                 saveAndRender();
             }
         }
@@ -888,7 +1040,9 @@
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appState, null, 2));
             const downloadAnchor = document.createElement('a');
             
-            const sanitizedName = (appState.clientName || 'checklist').replace(/[^a-zA-Z0-9א-ת]/g, '_');
+            const active = activeProj();
+            const activeName = active ? active.clientName : 'checklist';
+            const sanitizedName = (activeName || 'checklist').replace(/[^a-zA-Z0-9א-ת]/g, '_');
             const dateStr = new Date().toISOString().slice(0, 10);
             
             downloadAnchor.setAttribute("href", dataStr);
@@ -908,9 +1062,26 @@
                 try {
                     const imported = JSON.parse(e.target.result);
                     
-                    // Simple structural validation
-                    if (imported.phases && Array.isArray(imported.phases)) {
+                    if (imported.projects && Array.isArray(imported.projects)) {
                         appState = imported;
+                        activeTabId = "client-details";
+                        saveAndRender();
+                        alert("הגיבוי יובא בהצלחה!");
+                    } else if (imported.phases && Array.isArray(imported.phases)) {
+                        // Migrate old single project import to new structure
+                        appState = {
+                            projects: [
+                                {
+                                    id: "proj-" + Date.now(),
+                                    clientName: imported.clientName || "רשימת תיוג ללקוח",
+                                    clientPhone: imported.clientPhone || "050-0000000",
+                                    clientEmail: imported.clientEmail || "client@example.com",
+                                    phases: imported.phases
+                                }
+                            ],
+                            activeProjectId: null
+                        };
+                        appState.activeProjectId = appState.projects[0].id;
                         activeTabId = "client-details";
                         saveAndRender();
                         alert("הגיבוי יובא בהצלחה!");
@@ -923,13 +1094,12 @@
                 }
             };
             reader.readAsText(file);
-            // Clear input so same file can be selected again
             event.target.value = "";
         }
 
         // Reset system confirm
         function confirmReset() {
-            if (confirm("האם אתה בטוח שברצונך לאפס את הלוח? כל המשימות והשלבים המותאמים ופרטי הלקוח יימחקו והמערכת תחזור לברירת המחדל.")) {
+            if (confirm("האם אתה בטוח שברצונך לאפס את הלוח? כל הלקוחות, המשימות והשלבים יימחקו והמערכת תחזור לברירת המחדל.")) {
                 appState = JSON.parse(JSON.stringify(defaultState));
                 activeTabId = "client-details";
                 expandedNotes = {};
