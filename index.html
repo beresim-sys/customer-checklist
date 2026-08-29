@@ -369,6 +369,62 @@
             return active;
         }
 
+        function healAndRebuildState() {
+            if (!appState || !appState.projects || !Array.isArray(appState.projects)) return;
+            
+            const defaultProj = defaultState.projects[0];
+            
+            appState.projects.forEach(proj => {
+                if (!proj.phases || !Array.isArray(proj.phases)) {
+                    proj.phases = JSON.parse(JSON.stringify(defaultProj.phases));
+                    return;
+                }
+                
+                const rebuiltPhases = [];
+                
+                // 1. Rebuild the 5 default phases from the default template
+                defaultProj.phases.forEach(defPhase => {
+                    const freshPhase = JSON.parse(JSON.stringify(defPhase));
+                    
+                    // Look if the user has a phase with this ID or a similar title
+                    const userPhase = proj.phases.find(up => up.id === defPhase.id || up.title === defPhase.title) || 
+                                      proj.phases.find(up => up.title && up.title.includes(defPhase.title.split(':')[0])); // e.g. "שלב א'"
+                    
+                    if (userPhase) {
+                        // Map user tasks to fresh tasks by title
+                        freshPhase.tasks.forEach(freshTask => {
+                            const userTask = userPhase.tasks.find(ut => ut.title === freshTask.title || ut.id === freshTask.id);
+                            if (userTask) {
+                                freshTask.completed = userTask.completed;
+                                freshTask.dueDate = userTask.dueDate || "";
+                                freshTask.notes = userTask.notes || "";
+                            }
+                        });
+                        
+                        // Append any custom tasks the user added to this default phase
+                        userPhase.tasks.forEach(userTask => {
+                            const isDefaultTask = defPhase.tasks.some(dt => dt.title === userTask.title || dt.id === userTask.id);
+                            if (!isDefaultTask) {
+                                freshPhase.tasks.push(JSON.parse(JSON.stringify(userTask)));
+                            }
+                        });
+                    }
+                    
+                    rebuiltPhases.push(freshPhase);
+                });
+                
+                // 2. Append any custom phases the user created themselves
+                proj.phases.forEach(userPhase => {
+                    const isDefaultPhase = defaultProj.phases.some(dp => dp.id === userPhase.id || dp.title === userPhase.title);
+                    if (!isDefaultPhase) {
+                        rebuiltPhases.push(JSON.parse(JSON.stringify(userPhase)));
+                    }
+                });
+                
+                proj.phases = rebuiltPhases;
+            });
+        }
+
         // Load data from LocalStorage or initialize default
         function initApp() {
             const stored = localStorage.getItem("customerBookChecklist");
@@ -444,18 +500,8 @@
                 });
             }
 
-            // Safeguard: make sure all projects have Phase 5!
-            if (appState.projects && Array.isArray(appState.projects)) {
-                appState.projects.forEach(proj => {
-                    const hasPhase5 = proj.phases.some(ph => ph.id === "phase-5");
-                    if (!hasPhase5) {
-                        const defaultPhase5 = defaultState.projects[0].phases.find(ph => ph.id === "phase-5");
-                        if (defaultPhase5) {
-                            proj.phases.push(JSON.parse(JSON.stringify(defaultPhase5)));
-                        }
-                    }
-                });
-            }
+            // Run database self-healing and reconstruction
+            healAndRebuildState();
 
             // Load active tab from localStorage if exists
             const storedTab = localStorage.getItem("activeTabId");
@@ -1248,6 +1294,7 @@
                     
                     if (imported.projects && Array.isArray(imported.projects)) {
                         appState = imported;
+                        healAndRebuildState();
                         activeTabId = "client-details";
                         saveAndRender();
                         alert("הגיבוי יובא בהצלחה!");
@@ -1266,6 +1313,7 @@
                             activeProjectId: null
                         };
                         appState.activeProjectId = appState.projects[0].id;
+                        healAndRebuildState();
                         activeTabId = "client-details";
                         saveAndRender();
                         alert("הגיבוי יובא בהצלחה!");
