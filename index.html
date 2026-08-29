@@ -419,6 +419,19 @@
                 });
             }
 
+            // Safeguard: make sure all projects have Phase 5!
+            if (appState.projects && Array.isArray(appState.projects)) {
+                appState.projects.forEach(proj => {
+                    const hasPhase5 = proj.phases.some(ph => ph.id === "phase-5");
+                    if (!hasPhase5) {
+                        const defaultPhase5 = defaultState.projects[0].phases.find(ph => ph.id === "phase-5");
+                        if (defaultPhase5) {
+                            proj.phases.push(JSON.parse(JSON.stringify(defaultPhase5)));
+                        }
+                    }
+                });
+            }
+
             // Load active tab from localStorage if exists
             const storedTab = localStorage.getItem("activeTabId");
             if (storedTab) {
