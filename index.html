@@ -266,7 +266,7 @@
                 },
                 {
                     id: "phase-3",
-                    title: "שלב ג': עריכה והגהה",
+                    title: "שלב ג': סקיצה ראשונה",
                     tasks: [
                         { id: "task-3-1", title: "עריכה ספרותית ומבנית לטיוטה המלאה", completed: false, dueDate: "", notes: "שיפור זרימת העלילה/התוכן, ארגון מחדש של פרקים במידת הצורך." },
                         { id: "task-3-2", title: "עריכה לשונית וסגנונית", completed: false, dueDate: "", notes: "תיקון ניסוחים, זמנים, והאחדת סגנון הכתיבה." },
@@ -315,14 +315,15 @@
                 try {
                     appState = JSON.parse(stored);
                     if (appState.phases && Array.isArray(appState.phases) && appState.phases.length > 0) {
-                        // Check if it's the old default state (contains old task 1, old Phase 1 title, old Phase 2 titles, missing new Phase 2 tasks, or old research task titles)
+                        // Check if it's the old default state (contains old task 1, old Phase 1 title, old Phase 2 titles, missing new Phase 2 tasks, old research task titles, or old Phase 3 title)
                         const hasOldTask1 = appState.phases[0].tasks.some(t => t.title === "פגישת אפיון והגדרת קונספט לספר");
                         const hasOldPhase1Title = appState.phases[0].title === "שלב א': תכנון, אפיון והתקשרות";
                         const hasOldPhase2 = appState.phases.length > 1 && (appState.phases[1].title === "שלב ב': כתיבה ואיסוף חומרים" || appState.phases[1].title === "שלב ב': תחקיר");
                         const missingTask2_5 = appState.phases.length > 1 && !appState.phases[1].tasks.some(t => t.title === "הפעלת צוות העריכה הראשונית של טלי");
                         const hasOldResearchTask = appState.phases.length > 1 && appState.phases[1].tasks.some(t => t.title === "ביצוע תחקיר עומק");
                         const hasOldGeminiTask = appState.phases.length > 1 && appState.phases[1].tasks.some(t => t.title === "ניתוח מסמכים ותמונות בג'מיני וקישור למקורות הרקע");
-                        if (!hasOldTask1 && !hasOldPhase1Title && !hasOldPhase2 && !missingTask2_5 && !hasOldResearchTask && !hasOldGeminiTask) {
+                        const hasOldPhase3Title = appState.phases.length > 2 && appState.phases[2].title === "שלב ג': עריכה והגהה";
+                        if (!hasOldTask1 && !hasOldPhase1Title && !hasOldPhase2 && !missingTask2_5 && !hasOldResearchTask && !hasOldGeminiTask && !hasOldPhase3Title) {
                             useDefault = false;
                         }
                     }
