@@ -551,7 +551,6 @@
                     activePhase.tasks.forEach(task => {
                         const isCompleted = task.completed;
                         const isPastDue = task.dueDate && new Date(task.dueDate) < new Date() && !isCompleted;
-                        const isNotesOpen = expandedNotes[task.id] === true;
 
                         html += `
                             <div id="task-row-${task.id}" class="group py-4">
@@ -585,13 +584,6 @@
                                                    class="text-xs bg-slate-50 border border-slate-200 rounded-lg px-2 py-1.5 text-slate-500 focus:outline-none focus:border-brand-500 font-sans ${isPastDue ? 'border-red-300 text-red-600 bg-red-50' : ''}">
                                         </div>
 
-                                        <!-- Notes Toggle Button -->
-                                        <button onclick="toggleNotesRow('${task.id}')" 
-                                                title="הוסף / ערוך הערות"
-                                                class="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition ${task.notes ? 'text-brand-600 hover:text-brand-700 bg-brand-50' : ''}">
-                                            <i class="fa-solid fa-comment-dots text-sm"></i>
-                                        </button>
-
                                         <!-- Delete Task Button -->
                                         <button onclick="deleteTask('${activePhase.id}', '${task.id}')" 
                                                 title="מחק משימה"
@@ -599,15 +591,6 @@
                                             <i class="fa-solid fa-trash-can text-sm"></i>
                                         </button>
                                     </div>
-                                </div>
-
-                                <!-- Collapsible Notes Textarea -->
-                                <div id="notes-container-${task.id}" class="mr-8 mt-2 max-w-full ${isNotesOpen || task.notes ? '' : 'hidden'}">
-                                    <textarea 
-                                        placeholder="רשום כאן הערות, הנחיות או קישורים מיוחדים עבור תת-שלב זה..." 
-                                        onchange="updateTaskNotes('${activePhase.id}', '${task.id}', this.value)"
-                                        class="w-full text-xs text-slate-600 bg-slate-50 focus:bg-white border border-slate-200 focus:border-brand-500 rounded-lg p-2.5 outline-none resize-none transition"
-                                        rows="2">${escapeHtml(task.notes || "")}</textarea>
                                 </div>
                             </div>
                         `;
@@ -659,7 +642,6 @@
                                 </td>
                                 <td>
                                     <div class="font-semibold text-slate-800">${escapeHtml(task.title)}</div>
-                                    ${task.notes ? `<div class="text-[10px] text-slate-500 mt-0.5 bg-slate-50 border-r-2 border-slate-300 pr-2 py-0.5">${escapeHtml(task.notes)}</div>` : ''}
                                 </td>
                                 <td style="width: 110px;" class="text-slate-600 text-xs font-sans">${dateFormatted}</td>
                             </tr>
